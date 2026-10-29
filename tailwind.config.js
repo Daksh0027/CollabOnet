@@ -9,40 +9,48 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        card: {
-          DEFAULT: 'var(--card)',
-          foreground: 'var(--card-foreground)',
+        canvas: '#f9f9fb',
+        ink: {
+          DEFAULT: '#09090b',
+          muted: '#71717a',
+          soft: '#52525b',
+        },
+        surface: {
+          DEFAULT: '#fefefe',
+          muted: '#f4f4f6',
+        },
+        edge: {
+          DEFAULT: '#e4e4e7',
+          subtle: '#ebebef',
         },
         primary: {
-          DEFAULT: 'var(--primary)',
-          foreground: 'var(--primary-foreground)',
-          hover: 'var(--primary-hover)',
+          DEFAULT: '#0057ff',
+          foreground: '#ffffff',
+          hover: '#0047d6',
         },
         secondary: {
-          DEFAULT: 'var(--secondary)',
-          foreground: 'var(--secondary-foreground)',
+          DEFAULT: '#f4f4f6',
+          foreground: '#09090b',
         },
         muted: {
-          DEFAULT: 'var(--muted)',
-          foreground: 'var(--muted-foreground)',
+          DEFAULT: '#f4f4f6',
+          foreground: '#71717a',
         },
         accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
+          DEFAULT: '#10b981',
+          foreground: '#ffffff',
         },
         destructive: {
-          DEFAULT: 'var(--destructive)',
-          foreground: 'var(--destructive-foreground)',
+          DEFAULT: '#ef4444',
+          foreground: '#ffffff',
         },
         border: 'var(--border)',
         ring: 'var(--ring)',
       },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        xl: '14px',
+        '2xl': '18px',
+        '3xl': '24px',
       },
     },
   },
