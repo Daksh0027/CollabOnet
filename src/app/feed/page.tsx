@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { 
   Sparkles, 
   Search, 
   ShieldAlert, 
   AlertCircle, 
-  CheckCircle, 
+  CheckCircle2, 
   Send, 
   Copy, 
   Check, 
@@ -15,7 +16,12 @@ import {
   Globe, 
   DollarSign, 
   TrendingUp, 
-  Video 
+  Video,
+  ArrowUpRight,
+  SlidersHorizontal,
+  Flame,
+  ShieldCheck,
+  Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -28,6 +34,7 @@ import { CreatorProfile } from '@/lib/types';
 export default function FeedPage() {
   const { currentUser } = useAuth();
   const [query, setQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
   const [activeChips, setActiveChips] = useState<string[]>([]);
   const [creators, setCreators] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -37,10 +44,20 @@ export default function FeedPage() {
   const [generatingPitch, setGeneratingPitch] = useState(false);
   const [copiedPitch, setCopiedPitch] = useState(false);
 
+  const categories = [
+    'All',
+    'Tech & Hardware',
+    'Fintech',
+    'Fitness',
+    'Design & Creative',
+    'Gaming',
+    'Lifestyle',
+  ];
+
   const samplePrompts = [
-    'Find Indian fintech creators who do 60s YouTube integrations under $2,000 with >4% engagement',
-    'Tech creators with minimalist aesthetic desk setups in US or India',
-    'Lifestyle and fitness creators with >5% engagement and high brand safety score',
+    'Indian fintech creators with >4% engagement under $2,000',
+    'Minimalist desk setup & cinematic tech in US / India',
+    'Fitness athletes with >5% engagement and high brand safety',
   ];
 
   const performSearch = async (promptText: string) => {
@@ -65,13 +82,10 @@ export default function FeedPage() {
         chips.push(`Country: ${data.parsedFilters.countryCode}`);
       }
       if (data.parsedFilters?.maxRate) {
-        chips.push(`Max Rate: $${data.parsedFilters.maxRate.toLocaleString()}`);
+        chips.push(`Max: $${data.parsedFilters.maxRate.toLocaleString()}`);
       }
       if (data.parsedFilters?.minEngagementRate) {
-        chips.push(`Min Engagement: ${(data.parsedFilters.minEngagementRate * 100).toFixed(0)}%`);
-      }
-      if (data.parsedFilters?.deliverableFormat) {
-        chips.push(`Format: ${data.parsedFilters.deliverableFormat}`);
+        chips.push(`Min Eng: ${(data.parsedFilters.minEngagementRate * 100).toFixed(0)}%`);
       }
       if (data.appliedAestheticKeywords?.length) {
         data.appliedAestheticKeywords.forEach((k: string) => chips.push(`Vibe: ${k}`));
@@ -87,6 +101,17 @@ export default function FeedPage() {
   useEffect(() => {
     performSearch('');
   }, []);
+
+  const handleCategoryClick = (cat: string) => {
+    setActiveCategory(cat);
+    if (cat === 'All') {
+      setQuery('');
+      performSearch('');
+    } else {
+      setQuery(cat);
+      performSearch(cat);
+    }
+  };
 
   const handleGeneratePitch = async (creator: CreatorProfile) => {
     setGeneratingPitch(true);
@@ -116,215 +141,269 @@ export default function FeedPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Search Header Container */}
-      <div className="linkedin-card p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#f0f0f0] pb-3">
+    <div className="space-y-8">
+      {/* Editorial Header Section */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-neutral-200/80">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 text-neutral-800 text-[11px] font-semibold tracking-wider uppercase mb-3 border border-neutral-200/60">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#0057FF]" />
+            Curated Creator Index
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-950">
+            Discover Verified Talent.
+          </h1>
+          <p className="text-sm text-neutral-500 mt-1 max-w-xl">
+            Explore zero-scam influencer rosters with verified audience benchmarks, cryptographic KYC, and live escrow protection.
+          </p>
+        </div>
+
+        {/* Global Live Stats Ticker */}
+        <div className="flex items-center gap-4 bg-white rounded-2xl p-3 px-5 border border-neutral-200/80 shadow-xs text-xs">
           <div>
-            <h1 className="text-xl font-bold text-[#191919] tracking-tight">
-              Creator Marketplace &amp; AI Search
-            </h1>
-            <p className="text-xs text-[#5e5e5e] mt-0.5">
-              Structured filters with pgvector cosine vibe similarity and brand safety verification.
-            </p>
+            <div className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider">Creators Indexed</div>
+            <div className="font-extrabold text-neutral-950 text-base tabular-nums">1,420+</div>
           </div>
-          <Badge variant="accent" className="text-xs self-start sm:self-center">
-            Verified Roster Active
-          </Badge>
+          <div className="h-8 w-px bg-neutral-200" />
+          <div>
+            <div className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider">Avg Safety Score</div>
+            <div className="font-extrabold text-emerald-600 text-base tabular-nums">97.4%</div>
+          </div>
+          <div className="h-8 w-px bg-neutral-200" />
+          <div>
+            <div className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider">Default Rate</div>
+            <div className="font-extrabold text-[#0057FF] text-base tabular-nums">0.0%</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Behance-Style Category Filter Chips & AI Search Bar */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {categories.map((cat) => {
+            const isSelected = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => handleCategoryClick(cat)}
+                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-150 cursor-pointer ${
+                  isSelected
+                    ? 'bg-neutral-950 text-white shadow-sm'
+                    : 'bg-white text-neutral-700 hover:bg-neutral-100 border border-neutral-200/80'
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Search Input Box */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 p-1.5 rounded-[4px] border border-[#b2b2b2] bg-white focus-within:border-[#0a66c2] focus-within:ring-1 focus-within:ring-[#0a66c2] transition-colors">
-            <Search className="h-4 w-4 text-[#5e5e5e] ml-2 shrink-0" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && performSearch(query)}
-              placeholder="e.g. Find Indian fintech creators who do 60s YouTube integrations under $2,000..."
-              className="flex-1 bg-transparent border-none outline-none text-xs text-[#191919] placeholder:text-[#5e5e5e] px-2"
-            />
-            <Button
-              size="sm"
-              onClick={() => performSearch(query)}
-              disabled={loading}
-              className="h-8 px-4 text-xs font-semibold"
-            >
-              {loading ? 'Searching...' : 'Search'}
-            </Button>
-          </div>
+        {/* Minimalist Search Box */}
+        <div className="relative flex items-center bg-white rounded-2xl border border-neutral-200/80 p-2 shadow-xs focus-within:border-neutral-900 focus-within:ring-2 focus-within:ring-neutral-900/10 transition-all">
+          <Search className="h-4 w-4 text-neutral-400 ml-3 shrink-0" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && performSearch(query)}
+            placeholder="Type a natural query: e.g. 'Indian fintech creators under $2,000 with >4% engagement'..."
+            className="flex-1 bg-transparent border-none outline-none text-xs text-neutral-900 placeholder:text-neutral-400 px-3 py-1"
+          />
+          <Button
+            size="sm"
+            onClick={() => performSearch(query)}
+            disabled={loading}
+            className="h-8 px-4 rounded-xl text-xs font-semibold"
+          >
+            {loading ? 'Searching...' : 'Search'}
+          </Button>
+        </div>
 
-          {/* Active Parsed Badges */}
-          {activeChips.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1">
-              <span className="text-xs text-[#5e5e5e] mr-1">Parsed Filters:</span>
-              {activeChips.map((chip, idx) => (
-                <span
-                  key={idx}
-                  className="inline-flex items-center text-xs px-2.5 py-0.5 rounded-full bg-[#ebf4fd] text-[#0a66c2] border border-[#cce4f9] font-medium"
-                >
-                  {chip}
-                </span>
-              ))}
-              <button
-                onClick={() => {
-                  setQuery('');
-                  setActiveChips([]);
-                  performSearch('');
-                }}
-                className="text-xs text-[#0a66c2] hover:underline ml-2"
-              >
-                Clear all
-              </button>
-            </div>
-          )}
-
-          {/* Sample Prompts */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-[#5e5e5e]">
-            <span>Try searching:</span>
-            {samplePrompts.map((p, idx) => (
-              <button
+        {/* Parsed Badges */}
+        {activeChips.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="text-neutral-400 font-medium">Applied Filters:</span>
+            {activeChips.map((chip, idx) => (
+              <span
                 key={idx}
-                onClick={() => {
-                  setQuery(p);
-                  performSearch(p);
-                }}
-                className="text-xs text-[#0a66c2] hover:bg-[#ebf4fd] border border-[#e0dfdc] rounded-full px-3 py-1 transition-colors"
+                className="inline-flex items-center text-xs px-3 py-1 rounded-full bg-neutral-100 text-neutral-800 font-medium border border-neutral-200"
               >
-                {p.slice(0, 48)}...
-              </button>
+                {chip}
+              </span>
             ))}
+            <button
+              onClick={() => {
+                setQuery('');
+                setActiveChips([]);
+                setActiveCategory('All');
+                performSearch('');
+              }}
+              className="text-xs text-[#0057FF] hover:underline font-medium ml-1"
+            >
+              Reset
+            </button>
           </div>
+        )}
+
+        {/* Sample Prompt Pills */}
+        <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400">
+          <span>Suggestions:</span>
+          {samplePrompts.map((p, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setQuery(p);
+                performSearch(p);
+              }}
+              className="text-xs text-neutral-600 hover:text-neutral-950 hover:bg-neutral-100 border border-neutral-200/60 rounded-full px-3 py-1 transition-all"
+            >
+              {p}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Results Header */}
-      <div className="flex items-center justify-between px-1">
-        <div className="flex items-center gap-2">
-          <h2 className="text-sm font-bold text-[#191919]">Ranked Creator Matches</h2>
-          <span className="text-xs text-[#5e5e5e]">({creators.length} verified creators)</span>
-        </div>
-        <span className="text-xs text-[#5e5e5e]">Ranked by Vibe Match &amp; Brand Safety</span>
+      {/* Grid Header */}
+      <div className="flex items-center justify-between text-xs text-neutral-500 pt-2">
+        <span className="font-semibold text-neutral-900">
+          {creators.length} Curated Creators
+        </span>
+        <span>Ranked by Brand Safety &amp; Cosine Vibe Similarity</span>
       </div>
 
-      {/* Creator Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Behance-Style Visual Creator Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {creators.map((c) => {
           const hasCollision = !!c.internalCollisionNotice;
           const hasRivalAlert = !!c.competitorAlert;
+          const coverImage = c.coverImageUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80';
+          const avatarImage = c.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
 
           return (
             <div
               key={c.id}
-              className="linkedin-card p-4 flex flex-col justify-between hover:border-[#b2b2b2] transition-colors"
+              className="group bg-white rounded-3xl border border-neutral-200/80 overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.07)] hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                {/* Header Profile info */}
-                <div className="flex items-start justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-full bg-[#f4f2ee] border border-[#e0dfdc] text-[#0a66c2] font-bold text-sm flex items-center justify-center shrink-0">
-                      {c.displayName.slice(0, 2).toUpperCase()}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <h3 className="font-bold text-sm text-[#191919] hover:text-[#0a66c2] transition-colors cursor-pointer" onClick={() => setSelectedCreator(c)}>
-                          {c.displayName}
-                        </h3>
-                        <CheckCircle className="h-3.5 w-3.5 text-[#057642] shrink-0" />
-                      </div>
-                      <div className="text-xs text-[#5e5e5e]">{c.handle} • {c.city}, {c.countryCode}</div>
-                    </div>
-                  </div>
+                {/* 16:9 Visual Showcase Cover Banner */}
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-neutral-100 cursor-pointer" onClick={() => setSelectedCreator(c)}>
+                  <img
+                    src={coverImage}
+                    alt={c.displayName}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
 
-                  <Badge variant="accent" className="text-[10px]">
-                    {c.aiBrandSafetyScore}% Safety
-                  </Badge>
-                </div>
-
-                <p className="text-xs text-[#191919] line-clamp-2 mb-3 leading-relaxed">
-                  {c.bio}
-                </p>
-
-                {/* Vibe Tags */}
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {c.vibeTags.slice(0, 3).map((tag: string, i: number) => (
-                    <span key={i} className="text-[11px] bg-[#f4f2ee] text-[#5e5e5e] px-2 py-0.5 rounded border border-[#e0dfdc]">
-                      #{tag}
+                  {/* Top Badges */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-semibold tracking-wide uppercase border border-white/10">
+                      {c.primaryNiche}
                     </span>
-                  ))}
-                </div>
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/90 backdrop-blur-md text-white text-[10px] font-bold tracking-tight shadow-sm flex items-center gap-1">
+                      <ShieldCheck className="h-3 w-3" />
+                      {c.aiBrandSafetyScore}% Safety
+                    </span>
+                  </div>
 
-                {/* Stats Table */}
-                <div className="grid grid-cols-3 gap-1 py-2 px-3 rounded bg-[#f9fafb] border border-[#e8e7e3] text-center mb-3 text-xs">
-                  <div>
-                    <div className="text-[10px] text-[#5e5e5e]">Subscribers</div>
-                    <div className="font-bold text-[#191919] tabular-nums">
-                      {formatCompactNumber(c.statsCache.subscribers)}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-[10px] text-[#5e5e5e]">Engagement</div>
-                    <div className="font-bold text-[#057642] tabular-nums">
-                      {(c.statsCache.engagementRate * 100).toFixed(1)}%
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-[10px] text-[#5e5e5e]">Avg Views</div>
-                    <div className="font-bold text-[#191919] tabular-nums">
-                      {formatCompactNumber(c.statsCache.avgViews)}
-                    </div>
+                  {/* Bottom Rate Badge on Banner */}
+                  <div className="absolute bottom-3 right-3">
+                    <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-neutral-900 font-bold text-xs shadow-md tabular-nums">
+                      {c.rates.yt_integrated_60s ? formatCurrency(c.rates.yt_integrated_60s) : 'Rate on request'}
+                    </span>
                   </div>
                 </div>
 
-                {/* Rates */}
-                <div className="flex items-center justify-between text-xs py-1 border-t border-[#f0f0f0]">
-                  <span className="text-[#5e5e5e]">60s YouTube Integration:</span>
-                  <span className="font-bold text-[#191919] tabular-nums">
-                    {c.rates.yt_integrated_60s ? formatCurrency(c.rates.yt_integrated_60s) : 'Rate on request'}
-                  </span>
-                </div>
-
-                {/* AI Match Explanation */}
-                {c.aiMatchReason && (
-                  <div className="mt-2 p-2 rounded bg-[#ebf4fd] border border-[#cce4f9] text-[11px] text-[#0a66c2]">
-                    <span className="font-semibold">AI Match: </span>
-                    {c.aiMatchReason}
+                {/* Card Content & Profile */}
+                <div className="p-5 pt-3">
+                  {/* Avatar & Identifiers */}
+                  <div className="flex items-start justify-between gap-3 -mt-9 relative z-10 mb-3">
+                    <div className="h-14 w-14 rounded-2xl overflow-hidden border-2 border-white shadow-md bg-neutral-100 shrink-0">
+                      <img src={avatarImage} alt={c.displayName} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex items-center gap-1 mt-6">
+                      <span className="text-[11px] text-neutral-400 font-medium">{c.city}, {c.countryCode}</span>
+                    </div>
                   </div>
-                )}
 
-                {/* Zero-Knowledge Collision Warning */}
-                {hasCollision && (
-                  <div className="mt-2 p-2 rounded bg-[#fef3d6] border border-[#f9e2a8] text-[11px] text-[#915907] flex items-start gap-1.5">
-                    <ShieldAlert className="h-3.5 w-3.5 text-[#915907] shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 cursor-pointer" onClick={() => setSelectedCreator(c)}>
+                      <h3 className="font-bold text-base text-neutral-950 group-hover:text-[#0057FF] transition-colors leading-snug">
+                        {c.displayName}
+                      </h3>
+                      <CheckCircle2 className="h-4 w-4 text-[#0057FF] shrink-0" />
+                    </div>
+                    <div className="text-xs text-neutral-400 font-mono">{c.handle}</div>
+                  </div>
+
+                  <p className="text-xs text-neutral-600 line-clamp-2 mt-2.5 leading-relaxed">
+                    {c.bio}
+                  </p>
+
+                  {/* Vibe Chips */}
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {c.vibeTags.slice(0, 3).map((tag: string, i: number) => (
+                      <span
+                        key={i}
+                        className="text-[10px] font-medium bg-neutral-100 text-neutral-600 px-2.5 py-0.5 rounded-full border border-neutral-200/50"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Audience Data Matrix */}
+                  <div className="grid grid-cols-3 gap-2 py-3 px-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/60 text-center mt-4">
                     <div>
-                      <strong>Cross-Branch Notice: </strong>
-                      {c.internalCollisionNotice.branchName} previously worked with this creator at ~${c.internalCollisionNotice.historicalRate}. Avoid internal bidding wars.
+                      <div className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider">Reach</div>
+                      <div className="font-extrabold text-neutral-950 text-xs tabular-nums mt-0.5">
+                        {formatCompactNumber(c.statsCache.subscribers)}
+                      </div>
                     </div>
-                  </div>
-                )}
-
-                {/* Rival Exclusivity Alert */}
-                {hasRivalAlert && (
-                  <div className="mt-2 p-2 rounded bg-[#ffedea] border border-[#fcd4cd] text-[11px] text-[#c4242a] flex items-start gap-1.5">
-                    <AlertCircle className="h-3.5 w-3.5 text-[#c4242a] shrink-0 mt-0.5" />
                     <div>
-                      <strong>Exclusivity Warning: </strong>
-                      Sponsored post for rival brand <strong>{c.competitorAlert.brand}</strong> published {c.competitorAlert.daysAgo} days ago ({c.competitorAlert.daysRemaining}d cooling remaining).
+                      <div className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider">Avg Views</div>
+                      <div className="font-extrabold text-neutral-950 text-xs tabular-nums mt-0.5">
+                        {formatCompactNumber(c.statsCache.avgViews)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider">Engagement</div>
+                      <div className="font-extrabold text-emerald-600 text-xs tabular-nums mt-0.5">
+                        {(c.statsCache.engagementRate * 100).toFixed(1)}%
+                      </div>
                     </div>
                   </div>
-                )}
+
+                  {/* Warnings & Notices */}
+                  {hasCollision && (
+                    <div className="mt-3 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 flex items-start gap-2">
+                      <ShieldAlert className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
+                      <div className="leading-snug">
+                        <strong>Cross-Branch Deal: </strong>
+                        {c.internalCollisionNotice.branchName} hired at ~${c.internalCollisionNotice.historicalRate}.
+                      </div>
+                    </div>
+                  )}
+
+                  {hasRivalAlert && (
+                    <div className="mt-3 p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-[11px] text-rose-800 flex items-start gap-2">
+                      <AlertCircle className="h-3.5 w-3.5 text-rose-600 shrink-0 mt-0.5" />
+                      <div className="leading-snug">
+                        <strong>Exclusivity Warning: </strong>
+                        Active contract with {c.competitorAlert.brand} ({c.competitorAlert.daysRemaining}d remaining).
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-[#f0f0f0] mt-3 flex items-center gap-2">
+              <div className="p-5 pt-0 flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setSelectedCreator(c)}
-                  className="flex-1 text-xs h-8"
+                  className="flex-1 rounded-full text-xs h-9 border-neutral-200"
                 >
-                  Intelligence
+                  Portfolio
                 </Button>
                 <Button
                   variant="primary"
@@ -333,10 +412,10 @@ export default function FeedPage() {
                     setSelectedCreator(c);
                     handleGeneratePitch(c);
                   }}
-                  className="flex-1 text-xs h-8 gap-1.5"
+                  className="flex-1 rounded-full text-xs h-9 gap-1.5 bg-neutral-950 text-white hover:bg-neutral-800"
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  AI Outreach
+                  <Sparkles className="h-3.5 w-3.5 text-[#0057FF]" />
+                  Pitch Deal
                 </Button>
               </div>
             </div>
@@ -350,84 +429,86 @@ export default function FeedPage() {
           isOpen={!!selectedCreator && !outreachModalOpen}
           onClose={() => setSelectedCreator(null)}
           title={selectedCreator.displayName}
-          description={`Verified ${selectedCreator.primaryNiche} creator in ${selectedCreator.city}, ${selectedCreator.countryCode}`}
-          className="max-w-2xl"
         >
           <div className="space-y-4">
-            {selectedCreator.internalCollisionNotice && (
-              <Alert variant="warning">
-                <ShieldAlert className="h-4 w-4 text-[#915907]" />
-                <AlertTitle>Zero-Knowledge Cross-Branch Collision Alert</AlertTitle>
-                <AlertDescription>
-                  {selectedCreator.internalCollisionNotice.message}
-                </AlertDescription>
-              </Alert>
-            )}
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 rounded-2xl overflow-hidden border border-neutral-200 shadow-sm shrink-0">
+                <img
+                  src={selectedCreator.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'}
+                  alt={selectedCreator.displayName}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-lg text-neutral-950">{selectedCreator.displayName}</h3>
+                <div className="text-xs text-neutral-500 font-mono">{selectedCreator.handle} • {selectedCreator.city}, {selectedCreator.countryCode}</div>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <Badge variant="emerald" className="text-[10px]">
+                    {selectedCreator.aiBrandSafetyScore}% Safety Score
+                  </Badge>
+                  <Badge variant="secondary" className="text-[10px]">
+                    {selectedCreator.primaryNiche}
+                  </Badge>
+                </div>
+              </div>
+            </div>
 
-            {selectedCreator.competitorAlert && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4 text-[#c4242a]" />
-                <AlertTitle>Competitor Exclusivity Warning</AlertTitle>
-                <AlertDescription>
-                  {selectedCreator.competitorAlert.warning}
-                </AlertDescription>
-              </Alert>
-            )}
+            <p className="text-xs text-neutral-700 leading-relaxed bg-neutral-50 p-3 rounded-xl border border-neutral-100">
+              {selectedCreator.bio}
+            </p>
 
-            <div>
-              <h4 className="text-xs font-semibold text-[#5e5e5e] mb-2">
-                Verified Platform Rate Card
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3]">
-                  <div className="text-xs text-[#5e5e5e]">Instagram Reel</div>
-                  <div className="text-sm font-bold text-[#191919] tabular-nums mt-0.5">
-                    {formatCurrency(selectedCreator.rates.ig_reel || 0)}
+            {/* Standard Rates */}
+            <div className="space-y-1.5">
+              <div className="text-xs font-bold text-neutral-900">Standard Card Rates</div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/60">
+                  <div className="text-neutral-500 text-[10px]">Instagram Reel</div>
+                  <div className="font-bold text-neutral-900 tabular-nums">
+                    {selectedCreator.rates.ig_reel ? formatCurrency(selectedCreator.rates.ig_reel) : 'N/A'}
                   </div>
                 </div>
-                <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3]">
-                  <div className="text-xs text-[#5e5e5e]">60s YouTube Integration</div>
-                  <div className="text-sm font-bold text-[#191919] tabular-nums mt-0.5">
-                    {formatCurrency(selectedCreator.rates.yt_integrated_60s || 0)}
-                  </div>
-                </div>
-                <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3]">
-                  <div className="text-xs text-[#5e5e5e]">Dedicated Video</div>
-                  <div className="text-sm font-bold text-[#191919] tabular-nums mt-0.5">
-                    {formatCurrency(selectedCreator.rates.yt_dedicated || 0)}
+                <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/60">
+                  <div className="text-neutral-500 text-[10px]">60s YouTube Integration</div>
+                  <div className="font-bold text-neutral-900 tabular-nums">
+                    {selectedCreator.rates.yt_integrated_60s ? formatCurrency(selectedCreator.rates.yt_integrated_60s) : 'N/A'}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div>
-              <h4 className="text-xs font-semibold text-[#5e5e5e] mb-2">
-                Audited Content Samples
-              </h4>
-              <div className="space-y-2">
-                {selectedCreator.portfolioSamples.map((sample: any, idx: number) => (
-                  <div key={idx} className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] flex items-center justify-between text-xs">
-                    <div>
-                      <div className="font-semibold text-[#191919]">{sample.title}</div>
-                      <div className="text-[11px] text-[#5e5e5e]">{sample.views} • Verified by WorkerSocial sync</div>
+            {/* Portfolio Samples */}
+            {selectedCreator.portfolioSamples?.length > 0 && (
+              <div className="space-y-1.5">
+                <div className="text-xs font-bold text-neutral-900">Recent Production Samples</div>
+                <div className="space-y-1.5">
+                  {selectedCreator.portfolioSamples.map((sample: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-2.5 rounded-xl border border-neutral-200 text-xs hover:bg-neutral-50 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Video className="h-4 w-4 text-[#0057FF]" />
+                        <span className="font-medium text-neutral-900">{sample.title}</span>
+                      </div>
+                      <span className="text-neutral-400 font-mono text-[11px]">{sample.views}</span>
                     </div>
-                    <Badge variant="outline" className="text-[10px]">Verified Metric</Badge>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-[#f0f0f0]">
-              <Button variant="outline" onClick={() => setSelectedCreator(null)}>
+            <div className="pt-3 border-t border-neutral-100 flex items-center justify-end gap-2">
+              <Button variant="outline" size="sm" onClick={() => setSelectedCreator(null)}>
                 Close
               </Button>
               <Button
                 variant="primary"
+                size="sm"
                 onClick={() => handleGeneratePitch(selectedCreator)}
-                className="gap-2"
+                className="gap-1.5"
               >
-                <Sparkles className="h-4 w-4" />
-                Draft Personalized Pitch
+                <Sparkles className="h-3.5 w-3.5 text-[#0057FF]" />
+                Draft Outreach Pitch
               </Button>
             </div>
           </div>
@@ -438,46 +519,62 @@ export default function FeedPage() {
       <Modal
         isOpen={outreachModalOpen}
         onClose={() => setOutreachModalOpen(false)}
-        title="AI Personalized Outreach Copilot"
-        description="Generates tailored outreach hooks using creator bio, recent content topics, and engagement metrics."
-        className="max-w-xl"
+        title="AI Campaign Pitch Copilot"
       >
         <div className="space-y-4">
+          <p className="text-xs text-neutral-500">
+            Personalized outreach synthesized from creator's recent benchmarks, vibe aesthetics, and campaign brief terms.
+          </p>
+
           {generatingPitch ? (
-            <div className="py-12 text-center space-y-2 text-xs text-[#5e5e5e]">
-              <Sparkles className="h-6 w-6 text-[#0a66c2] mx-auto" />
-              <p>Synthesizing creator portfolio and campaign brief...</p>
+            <div className="p-8 text-center space-y-2">
+              <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-neutral-900 border-t-transparent" />
+              <div className="text-xs text-neutral-500">Synthesizing personalized outreach pitch...</div>
             </div>
           ) : (
-            <>
-              <div className="p-3.5 rounded bg-[#f9fafb] border border-[#e8e7e3] text-xs text-[#191919] whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
-                {generatedPitch}
+            <div className="space-y-3">
+              <div className="relative">
+                <textarea
+                  value={generatedPitch}
+                  onChange={(e) => setGeneratedPitch(e.target.value)}
+                  rows={8}
+                  className="w-full rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-xs font-mono text-neutral-900 leading-relaxed outline-none focus:border-[#0057FF] focus:bg-white transition-all"
+                />
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#f0f0f0]">
-                <span className="text-xs text-[#5e5e5e]">
-                  Pre-fills connection pitch
-                </span>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={copyToClipboard} className="gap-1.5 text-xs">
-                    {copiedPitch ? <Check className="h-3.5 w-3.5 text-[#057642]" /> : <Copy className="h-3.5 w-3.5" />}
-                    {copiedPitch ? 'Copied' : 'Copy Pitch'}
-                  </Button>
+              <div className="flex items-center justify-between">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={copyToClipboard}
+                  className="gap-1.5 text-xs rounded-full"
+                >
+                  {copiedPitch ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copiedPitch ? 'Copied to Clipboard' : 'Copy Pitch'}
+                </Button>
+
+                <div className="flex items-center gap-2">
                   <Button
-                    variant="primary"
+                    variant="outline"
                     size="sm"
-                    onClick={() => {
-                      setOutreachModalOpen(false);
-                      window.location.href = '/messages';
-                    }}
-                    className="gap-1.5 text-xs"
+                    onClick={() => setOutreachModalOpen(false)}
+                    className="rounded-full"
                   >
-                    <Send className="h-3.5 w-3.5" />
-                    Send &amp; Open Deal Room
+                    Done
                   </Button>
+                  <Link href="/messages">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="gap-1.5 rounded-full bg-neutral-950 text-white"
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                      Open Deal Room
+                    </Button>
+                  </Link>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </div>
       </Modal>

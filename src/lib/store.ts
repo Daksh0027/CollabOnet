@@ -88,6 +88,8 @@ export const SEED_CREATORS: CreatorProfile[] = [
     vibeTags: ['cinematic storytelling', 'minimalist desk', 'benchmark geek', 'clean aesthetic'],
     aiBrandSafetyScore: 96.5,
     isOpenForCollabs: true,
+    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+    coverImageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
     portfolioSamples: [
       { title: 'Analyzing Neo-Banks in India', views: '142K views', url: '#' },
       { title: 'Desk Setup Tour 2026: Minimal & Dark', views: '310K views', url: '#' },
@@ -118,6 +120,8 @@ export const SEED_CREATORS: CreatorProfile[] = [
     vibeTags: ['approachable financial advice', 'data charts', 'gen-z relatable'],
     aiBrandSafetyScore: 98.0,
     isOpenForCollabs: true,
+    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+    coverImageUrl: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80',
     portfolioSamples: [
       { title: 'Where I Invest $5,000 Every Month', views: '280K views', url: '#' },
     ],
@@ -147,6 +151,8 @@ export const SEED_CREATORS: CreatorProfile[] = [
     vibeTags: ['high-energy', 'outdoor aesthetic', 'raw discipline', 'cinematic color grading'],
     aiBrandSafetyScore: 95.0,
     isOpenForCollabs: true,
+    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+    coverImageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80',
     portfolioSamples: [
       { title: 'Running 50 Miles on Pure Electrolytes', views: '450K views', url: '#' },
     ],
@@ -176,6 +182,8 @@ export const SEED_CREATORS: CreatorProfile[] = [
     vibeTags: ['minimalist', 'clean aesthetic', 'instructional', 'high retention'],
     aiBrandSafetyScore: 99.0,
     isOpenForCollabs: true,
+    avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80',
+    coverImageUrl: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80',
     portfolioSamples: [
       { title: 'Redesigning Spotify in 10 Minutes', views: '210K views', url: '#' },
     ],
@@ -205,6 +213,8 @@ export const SEED_CREATORS: CreatorProfile[] = [
     vibeTags: ['neon cyberpunk', 'snappy fast-paced', 'humorous', 'gamer setup'],
     aiBrandSafetyScore: 91.0,
     isOpenForCollabs: true,
+    avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
+    coverImageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80',
     portfolioSamples: [
       { title: 'I Built the Most Overkill RTX 5090 Setup', views: '820K views', url: '#' },
     ],
@@ -234,6 +244,8 @@ export const SEED_CREATORS: CreatorProfile[] = [
     vibeTags: ['vintage film look', 'brutalist aesthetic', 'curated editorial', 'slow living'],
     aiBrandSafetyScore: 97.2,
     isOpenForCollabs: true,
+    avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80',
+    coverImageUrl: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80',
     portfolioSamples: [
       { title: 'Berlin Thrift Diaries: Autumn Edition', views: '190K views', url: '#' },
     ],

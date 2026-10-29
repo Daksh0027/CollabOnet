@@ -3,63 +3,100 @@
 @tailwind utilities;
 
 :root {
-  --background: #f4f2ee;
-  --foreground: #191919;
+  --background: #f9f9fb;
+  --foreground: #09090b;
   --card: #ffffff;
-  --card-foreground: #191919;
-  --primary: #0a66c2;
+  --card-foreground: #09090b;
+  --primary: #0057ff;
   --primary-foreground: #ffffff;
-  --primary-hover: #004182;
-  --secondary: #edf3f8;
-  --secondary-foreground: #0a66c2;
-  --muted: #f3f2ef;
-  --muted-foreground: #5e5e5e;
-  --accent: #057642;
+  --primary-hover: #0047d6;
+  --secondary: #f4f4f6;
+  --secondary-foreground: #09090b;
+  --muted: #f4f4f6;
+  --muted-foreground: #71717a;
+  --accent: #10b981;
   --accent-foreground: #ffffff;
-  --destructive: #c4242a;
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #e0dfdc;
-  --rule: #f0f0f0;
-  --ring: #0a66c2;
-  --radius: 8px;
+  --border: #e4e4e7;
+  --rule: #f4f4f5;
+  --ring: #0057ff;
+  --radius: 14px;
 }
 
 body {
-  color: #191919;
-  background-color: #f4f2ee;
-  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #09090b;
+  background-color: #f9f9fb;
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
 }
 
-/* Tabular figures on numbers and financial values */
+/* Tabular figures for pricing, metrics and numbers */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
-/* Custom crisp scrollbar */
+/* Custom sleek scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #f4f2ee;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c7c7c7;
+  background: #d4d4d8;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #a0a0a0;
+  background: #a1a1aa;
 }
 
-/* LinkedIn clean flat surface card */
+/* Behance / Minimal Gallery Surfaces */
+.behance-card,
 .linkedin-card {
   background: #ffffff;
-  border: 1px solid #e0dfdc;
-  border-radius: 8px;
+  border: 1px solid rgba(228, 228, 231, 0.8);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 4px 12px rgba(0, 0, 0, 0.015);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.behance-card:hover,
+.linkedin-card:hover {
+  border-color: rgba(212, 212, 216, 1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
 }
 
 .linkedin-divider {
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid #f4f4f5;
+}
+
+/* Subtle glassmorphism navigation and chips */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(228, 228, 231, 0.8);
+}
+
+/* Micro pill tags */
+.editorial-pill {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: #f4f4f6;
+  color: #3f3f46;
+  border: 1px solid #e4e4e7;
+  transition: all 0.15s ease;
+}
+
+.editorial-pill:hover {
+  background: #ececee;
+  color: #09090b;
 }

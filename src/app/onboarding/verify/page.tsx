@@ -9,7 +9,11 @@ import {
   CheckCircle2, 
   Sparkles, 
   Smartphone, 
-  Mail
+  Mail,
+  ArrowRight,
+  ShieldAlert,
+  Lock,
+  UserCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -73,41 +77,42 @@ export default function VerificationPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 py-2">
-      <div className="text-center space-y-2">
-        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#ebf4fd] text-[#0a66c2] border border-[#cce4f9] text-xs font-semibold">
-          <ShieldCheck className="h-3.5 w-3.5 text-[#057642]" />
-          <span>Two-Phase Human-in-the-Loop Verification</span>
+    <div className="max-w-2xl mx-auto space-y-8 py-4">
+      {/* Editorial Header */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 text-neutral-800 text-[11px] font-semibold tracking-wider uppercase border border-neutral-200/60">
+          <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+          <span>2-Phase KYC Moat</span>
         </div>
-        <h1 className="text-2xl font-bold text-[#191919] tracking-tight">
-          Cryptographic Identity Verification
+        <h1 className="text-3xl font-extrabold text-neutral-950 tracking-tight">
+          Identity Verification
         </h1>
-        <p className="text-xs text-[#5e5e5e] max-w-lg mx-auto">
-          To eliminate fake emails and impersonation scams, all accounts pass Whisper ASR dynamic nonce matching and platform admin review.
+        <p className="text-xs text-neutral-500 max-w-md mx-auto leading-relaxed">
+          Zero-trust onboarding: Whisper ASR dynamic liveness nonce matching + admin human-in-the-loop review.
         </p>
 
-        {/* Step Indicator Bar */}
-        <div className="flex items-center justify-center gap-2 pt-2">
+        {/* Step Indicator */}
+        <div className="flex items-center justify-center gap-3 pt-3">
           {[
-            { num: 1, label: 'Contact & Role' },
+            { num: 1, label: 'Role & Contact' },
             { num: 2, label: 'Liveness Nonce' },
-            { num: 3, label: 'Whisper Copilot' },
-            { num: 4, label: 'Auditor Review' },
+            { num: 3, label: 'Whisper ASR' },
+            { num: 4, label: 'Auditor Verdict' },
           ].map((s) => (
             <div key={s.num} className="flex items-center gap-2">
               <div
-                className={`h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                   step >= s.num
-                    ? 'bg-[#0a66c2] text-white'
-                    : 'bg-[#f4f2ee] text-[#5e5e5e] border border-[#e0dfdc]'
+                    ? 'bg-neutral-950 text-white shadow-xs'
+                    : 'bg-neutral-100 text-neutral-400 border border-neutral-200'
                 }`}
               >
                 {s.num}
               </div>
-              <span className={`text-xs hidden sm:inline ${step >= s.num ? 'text-[#191919] font-semibold' : 'text-[#5e5e5e]'}`}>
+              <span className={`text-xs hidden sm:inline font-medium ${step >= s.num ? 'text-neutral-900' : 'text-neutral-400'}`}>
                 {s.label}
               </span>
-              {s.num < 4 && <div className="h-0.5 w-4 bg-[#e0dfdc]" />}
+              {s.num < 4 && <div className="h-0.5 w-5 bg-neutral-200" />}
             </div>
           ))}
         </div>
@@ -115,89 +120,96 @@ export default function VerificationPage() {
 
       {/* Step 1: Role Selection & Contact Verification */}
       {step === 1 && (
-        <div className="linkedin-card p-5 space-y-5">
-          <div className="space-y-3">
-            <h2 className="text-base font-bold text-[#191919]">Select Account Persona and Contact Verification</h2>
+        <div className="bg-white rounded-3xl border border-neutral-200/80 p-8 shadow-xs space-y-6">
+          <div className="space-y-4">
+            <div>
+              <h2 className="text-base font-bold text-neutral-950">Select Account Class</h2>
+              <p className="text-xs text-neutral-400 mt-0.5">Determine role permissions and messaging isolation level.</p>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
-                { id: 'CREATOR', title: 'Content Creator', desc: 'Monetize audience and sign escrow contracts.' },
-                { id: 'AGENCY_MANAGER', title: 'Talent Agency', desc: 'Represents creators with masked brand POI.' },
-                { id: 'ENTERPRISE_REP', title: 'Enterprise Rep', desc: 'Sourcing talent within regional branch.' },
+                { id: 'CREATOR', title: 'Content Creator', desc: 'Direct brand deals and escrow milestones.' },
+                { id: 'AGENCY_MANAGER', title: 'Talent Agency', desc: 'Represents creators with masked company POI.' },
+                { id: 'ENTERPRISE_REP', title: 'Brand Sponsor', desc: 'Sourcing and funding campaign escrows.' },
               ].map((r) => (
                 <button
                   key={r.id}
                   type="button"
                   onClick={() => setRoleType(r.id as any)}
-                  className={`p-3 rounded-[6px] border text-left transition-colors ${
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                     roleType === r.id
-                      ? 'border-[#0a66c2] bg-[#ebf4fd] text-[#191919]'
-                      : 'border-[#e0dfdc] bg-white text-[#5e5e5e] hover:border-[#b2b2b2]'
+                      ? 'border-neutral-950 bg-neutral-950 text-white shadow-sm'
+                      : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                   }`}
                 >
-                  <div className="font-bold text-xs text-[#191919] mb-0.5">{r.title}</div>
-                  <div className="text-[11px] leading-relaxed">{r.desc}</div>
+                  <div className={`font-bold text-xs mb-1 ${roleType === r.id ? 'text-white' : 'text-neutral-950'}`}>
+                    {r.title}
+                  </div>
+                  <div className={`text-[11px] leading-relaxed ${roleType === r.id ? 'text-neutral-300' : 'text-neutral-500'}`}>
+                    {r.desc}
+                  </div>
                 </button>
               ))}
             </div>
 
             {/* Manager Declaration Checkbox */}
-            <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3]">
-              <label className="flex items-start gap-2.5 cursor-pointer">
+            <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/60">
+              <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={isManagerDeclared}
                   onChange={(e) => setIsManagerDeclared(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-[#b2b2b2] text-[#0a66c2] focus:ring-[#0a66c2]"
+                  className="mt-1 h-4 w-4 rounded border-neutral-300 text-neutral-950 focus:ring-neutral-950"
                 />
                 <div className="text-xs">
-                  <span className="font-semibold text-[#191919]">
-                    Mandatory Declaration: Are you an Agency or Talent Manager representing other creators?
+                  <span className="font-bold text-neutral-900">
+                    Mandatory Declaration: Are you an Agency or Talent Manager representing creators?
                   </span>
-                  <p className="text-[11px] text-[#5e5e5e] mt-0.5">
-                    Agency accounts must upload signed Representation Agreements. Falsifying this step triggers immediate account suspension.
+                  <p className="text-[11px] text-neutral-500 mt-1 leading-relaxed">
+                    Unchecked mediators attempting to pose directly as creators will be permanently blacklisted to the public Hall of Shame upon verification audit.
                   </p>
                 </div>
               </label>
             </div>
 
-            {/* OTP Verification */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#191919]">
-                  <Smartphone className="h-3.5 w-3.5 text-[#057642]" />
-                  SMS Phone OTP Challenge
+            {/* OTP Verification Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-900">
+                  <Smartphone className="h-3.5 w-3.5 text-emerald-600" />
+                  Mobile SMS Challenge
                 </div>
                 <input
                   type="text"
                   placeholder="Enter 6-digit SMS OTP"
                   value={phoneOtp}
                   onChange={(e) => setPhoneOtp(e.target.value)}
-                  className="w-full bg-white border border-[#b2b2b2] rounded p-2 text-xs text-[#191919] placeholder:text-[#5e5e5e]"
+                  className="w-full bg-white border border-neutral-200 rounded-xl p-2.5 text-xs text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-neutral-950"
                 />
-                <span className="text-[11px] text-[#057642]">Verified via SMS Gateway</span>
+                <span className="text-[10px] text-emerald-700 font-medium">Twilio SMS Gateway Active</span>
               </div>
 
-              <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#191919]">
-                  <Mail className="h-3.5 w-3.5 text-[#0a66c2]" />
-                  Corporate or Creator Email
+              <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-900">
+                  <Mail className="h-3.5 w-3.5 text-[#0057FF]" />
+                  Corporate Work Email
                 </div>
                 <input
                   type="text"
-                  placeholder="Enter Magic Link Token"
+                  placeholder="Token / domain verification"
                   value={emailOtp}
                   onChange={(e) => setEmailOtp(e.target.value)}
-                  className="w-full bg-white border border-[#b2b2b2] rounded p-2 text-xs text-[#191919] placeholder:text-[#5e5e5e]"
+                  className="w-full bg-white border border-neutral-200 rounded-xl p-2.5 text-xs text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-neutral-950"
                 />
-                <span className="text-[11px] text-[#0a66c2]">DNS TXT record validation active</span>
+                <span className="text-[10px] text-[#0057FF] font-medium">Domain DNS MX Match</span>
               </div>
             </div>
 
-            <div className="flex justify-end pt-3 border-t border-[#f0f0f0]">
-              <Button onClick={handleInitPhase1} className="gap-2 text-xs">
-                <span>Continue to Phase 1 (Liveness Nonce)</span>
-                <CheckCircle2 className="h-4 w-4" />
+            <div className="flex justify-end pt-4 border-t border-neutral-100">
+              <Button onClick={handleInitPhase1} className="gap-2 text-xs rounded-full bg-neutral-950 text-white">
+                <span>Proceed to Liveness Nonce</span>
+                <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -206,44 +218,43 @@ export default function VerificationPage() {
 
       {/* Step 2: Dynamic 6-Word Nonce Recording */}
       {step === 2 && (
-        <div className="linkedin-card p-5 space-y-5">
-          <div className="space-y-3">
+        <div className="bg-white rounded-3xl border border-neutral-200/80 p-8 shadow-xs space-y-6">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold text-[#191919]">Phase 1: Dynamic 6-Word Liveness Nonce</h2>
-              <Badge variant="warning" className="text-xs">10m TTL Session</Badge>
+              <div>
+                <h2 className="text-base font-bold text-neutral-950">Phase 1: Dynamic Liveness Nonce</h2>
+                <p className="text-xs text-neutral-400 mt-0.5">Recite the randomized 6-word phrase on camera.</p>
+              </div>
+              <Badge variant="warning" className="text-[10px]">10m Session TTL</Badge>
             </div>
 
-            <p className="text-xs text-[#5e5e5e]">
-              To defeat deepfakes and pre-recorded botted footage, recite this dynamic 6-word session passphrase generated by the server:
-            </p>
-
-            <div className="p-5 rounded-[6px] bg-[#ebf4fd] border border-[#cce4f9] text-center space-y-1">
-              <div className="text-xs font-semibold text-[#0a66c2]">Read aloud on video:</div>
-              <div className="text-xl sm:text-2xl font-bold text-[#191919] tracking-tight py-1">
+            <div className="p-6 rounded-2xl bg-neutral-950 text-white text-center space-y-2 shadow-inner">
+              <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Recite Clearly on Webcam:</div>
+              <div className="text-xl sm:text-2xl font-black text-white tracking-tight py-1 font-mono">
                 &ldquo;{sessionNonce.replace(/-/g, ' ')}&rdquo;
               </div>
-              <p className="text-[11px] text-[#5e5e5e]">
-                Server Session Nonce: <code>{sessionNonce}</code>
+              <p className="text-[10px] text-neutral-500 font-mono">
+                NONCE ID: {sessionNonce}
               </p>
             </div>
 
-            <div className="p-4 rounded-[6px] bg-[#f9fafb] border border-[#e8e7e3] text-center space-y-3">
-              <div className="h-36 rounded bg-white border border-[#e0dfdc] flex flex-col items-center justify-center p-3">
+            <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-200/60 text-center space-y-4">
+              <div className="h-40 rounded-2xl bg-white border border-neutral-200 flex flex-col items-center justify-center p-4">
                 {isRecording ? (
-                  <div className="space-y-1">
-                    <div className="h-3 w-3 rounded-full bg-[#c4242a] mx-auto" />
-                    <p className="text-xs font-bold text-[#c4242a]">Recording audio and video stream...</p>
+                  <div className="space-y-2">
+                    <div className="h-3.5 w-3.5 rounded-full bg-rose-600 mx-auto animate-ping" />
+                    <p className="text-xs font-bold text-rose-600">Recording audio and video stream...</p>
                   </div>
                 ) : videoRecorded ? (
-                  <div className="space-y-1">
-                    <CheckCircle2 className="h-7 w-7 text-[#057642] mx-auto" />
-                    <p className="text-xs font-bold text-[#191919]">Video Captured (00:08s)</p>
-                    <p className="text-[11px] text-[#5e5e5e]">Audio: &ldquo;{spokenTranscript}&rdquo;</p>
+                  <div className="space-y-2">
+                    <CheckCircle2 className="h-8 w-8 text-emerald-600 mx-auto" />
+                    <p className="text-xs font-bold text-neutral-950">Video Captured (00:08s)</p>
+                    <p className="text-[11px] text-neutral-400 font-mono">&ldquo;{spokenTranscript}&rdquo;</p>
                   </div>
                 ) : (
-                  <div className="space-y-1 text-[#5e5e5e]">
-                    <Video className="h-7 w-7 mx-auto text-[#0a66c2]" />
-                    <p className="text-xs">Click record to start 8-second selfie verification check</p>
+                  <div className="space-y-2 text-neutral-400">
+                    <Video className="h-8 w-8 mx-auto text-neutral-400" />
+                    <p className="text-xs font-medium">Click below to record 8-second liveness check</p>
                   </div>
                 )}
               </div>
@@ -253,19 +264,19 @@ export default function VerificationPage() {
                   <Button
                     onClick={handleRecordVideo}
                     disabled={isRecording}
-                    className="gap-2 bg-[#c4242a] hover:bg-[#a51d22] text-xs h-8"
+                    className="gap-2 bg-rose-600 hover:bg-rose-700 text-white text-xs h-9 rounded-full px-5"
                   >
                     <Mic className="h-3.5 w-3.5" />
-                    {isRecording ? 'Capturing Video...' : 'Start Recording Video'}
+                    {isRecording ? 'Capturing Video...' : 'Start Recording Liveness'}
                   </Button>
                 ) : (
                   <Button
                     onClick={handleSubmitWhisper}
                     disabled={analyzingAudio}
-                    className="gap-2 bg-[#057642] hover:bg-[#046237] text-xs h-8"
+                    className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-9 rounded-full px-5"
                   >
                     <Sparkles className="h-3.5 w-3.5" />
-                    {analyzingAudio ? 'Whisper ASR Transcribing...' : 'Verify Audio with Whisper ASR'}
+                    {analyzingAudio ? 'Whisper ASR Transcribing...' : 'Verify Audio Stream'}
                   </Button>
                 )}
               </div>
@@ -274,32 +285,35 @@ export default function VerificationPage() {
         </div>
       )}
 
-      {/* Step 3: Whisper ASR Verification Verdict */}
+      {/* Step 3: Whisper ASR Verdict */}
       {step === 3 && verificationResult && (
-        <div className="linkedin-card p-5 space-y-4">
+        <div className="bg-white rounded-3xl border border-neutral-200/80 p-8 shadow-xs space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-[#191919]">Phase 1 Nonce Verification Result</h2>
-            <Badge variant="accent" className="text-xs">{verificationResult.badge}</Badge>
+            <div>
+              <h2 className="text-base font-bold text-neutral-950">Phase 1 Verdict</h2>
+              <p className="text-xs text-neutral-400 mt-0.5">Automated transcription and acoustic analysis.</p>
+            </div>
+            <Badge variant="emerald" className="text-xs">{verificationResult.badge}</Badge>
           </div>
 
-          <div className="p-4 rounded-[6px] bg-[#e6f4ea] border border-[#c6ebd1] space-y-2">
-            <div className="flex items-center gap-2 text-[#057642] font-bold text-xs">
-              <CheckCircle2 className="h-4 w-4" />
-              Audio Nonce Validated with {Math.round(verificationResult.confidenceScore * 100)}% Confidence
+          <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200/60 space-y-3">
+            <div className="flex items-center gap-2 text-emerald-800 font-bold text-xs">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              Liveness Nonce Matched ({Math.round(verificationResult.confidenceScore * 100)}% Confidence)
             </div>
-            <p className="text-xs text-[#191919] leading-relaxed">
+            <p className="text-xs text-emerald-950 leading-relaxed">
               OpenAI Whisper ASR transcribed the audio stream from the uploaded video. The dynamic nonce phrase matched the server session timestamp.
             </p>
-            <div className="p-2.5 rounded bg-white border border-[#e0dfdc] text-xs space-y-0.5">
-              <div>Expected Nonce: <span className="font-semibold text-[#0a66c2]">{verificationResult.expectedNonce}</span></div>
-              <div>Whisper Audio: <span className="font-semibold text-[#057642]">{verificationResult.whisperTranscript}</span></div>
+            <div className="p-3 rounded-xl bg-white border border-emerald-200/80 text-xs font-mono space-y-1">
+              <div>Expected Nonce: <span className="font-bold text-neutral-900">{verificationResult.expectedNonce}</span></div>
+              <div>Whisper Audio: <span className="font-bold text-emerald-600">{verificationResult.whisperTranscript}</span></div>
             </div>
           </div>
 
-          <div className="flex justify-between items-center pt-3 border-t border-[#f0f0f0]">
-            <span className="text-xs text-[#5e5e5e]">Status: Transferred to Phase 2 review queue</span>
-            <Button onClick={() => setStep(4)} className="text-xs h-8">
-              <span>View Auditor Review Queue</span>
+          <div className="flex justify-between items-center pt-4 border-t border-neutral-100">
+            <span className="text-xs text-neutral-400">Enqueued for Phase 2 auditor review</span>
+            <Button onClick={() => setStep(4)} className="text-xs h-9 rounded-full bg-neutral-950 text-white">
+              <span>View Auditor Queue</span>
             </Button>
           </div>
         </div>
@@ -307,54 +321,53 @@ export default function VerificationPage() {
 
       {/* Step 4: Auditor Review Terminal */}
       {step === 4 && (
-        <div className="linkedin-card p-5 space-y-4">
+        <div className="bg-white rounded-3xl border border-neutral-200/80 p-8 shadow-xs space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-[#191919]">Phase 2: Platform Auditor Review Terminal</h2>
-            <Badge variant="warning" className="text-xs">Admin Queue View</Badge>
+            <div>
+              <h2 className="text-base font-bold text-neutral-950">Phase 2: Platform Auditor Terminal</h2>
+              <p className="text-xs text-neutral-400 mt-0.5">Human-in-the-loop verification review.</p>
+            </div>
+            <Badge variant="accent" className="text-xs">Admin Review Mode</Badge>
           </div>
 
-          <p className="text-xs text-[#5e5e5e]">
-            Review verification footage, Whisper transcript diff, and corporate domain DNS records:
-          </p>
-
-          <div className="p-3.5 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-3">
+          <div className="p-5 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs font-bold text-[#191919]">{currentUser.name}</div>
-                <div className="text-[11px] text-[#5e5e5e]">{currentUser.email} • {currentUser.role}</div>
+                <div className="text-sm font-bold text-neutral-950">{currentUser.name}</div>
+                <div className="text-xs text-neutral-400 font-mono">{currentUser.email} • {currentUser.role}</div>
               </div>
-              <Badge variant="accent">Nonce Verified</Badge>
+              <Badge variant="emerald">Nonce Matched</Badge>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="p-2.5 rounded bg-white border border-[#e0dfdc]">
-                <div className="text-[10px] text-[#5e5e5e]">Corporate Domain</div>
-                <div className="font-semibold text-[#191919] mt-0.5">nike.com (DNS TXT Matched)</div>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-xl bg-white border border-neutral-200/60">
+                <div className="text-[10px] text-neutral-400 font-bold uppercase">Corporate Domain</div>
+                <div className="font-semibold text-neutral-900 mt-0.5">nike.com (DNS TXT Matched)</div>
               </div>
-              <div className="p-2.5 rounded bg-white border border-[#e0dfdc]">
-                <div className="text-[10px] text-[#5e5e5e]">Fraud Risk Score</div>
-                <div className="font-semibold text-[#057642] mt-0.5">0.02 (Low Risk)</div>
+              <div className="p-3 rounded-xl bg-white border border-neutral-200/60">
+                <div className="text-[10px] text-neutral-400 font-bold uppercase">Fraud Risk Vector</div>
+                <div className="font-semibold text-emerald-600 mt-0.5">0.02 (Low Risk)</div>
               </div>
             </div>
 
             {adminApproved ? (
-              <div className="p-3 rounded bg-[#e6f4ea] border border-[#c6ebd1] text-center space-y-1">
-                <CheckCircle2 className="h-6 w-6 text-[#057642] mx-auto" />
-                <div className="text-xs font-bold text-[#191919]">Account Fully Verified &amp; Active</div>
-                <p className="text-[11px] text-[#5e5e5e]">
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-1">
+                <CheckCircle2 className="h-6 w-6 text-emerald-600 mx-auto" />
+                <div className="text-xs font-bold text-emerald-950">Account Fully Verified &amp; Badge Issued</div>
+                <p className="text-[11px] text-emerald-800">
                   User can now execute legally binding milestone contracts and access isolated negotiation deal rooms.
                 </p>
               </div>
             ) : (
-              <div className="flex justify-end gap-2 pt-2 border-t border-[#e8e7e3]">
-                <Button variant="outline" size="sm" className="text-xs h-7 text-[#c4242a]">
+              <div className="flex justify-end gap-2 pt-3 border-t border-neutral-200/60">
+                <Button variant="outline" size="sm" className="text-xs h-8 rounded-full text-rose-600 border-neutral-200">
                   Flag Discrepancy
                 </Button>
                 <Button
                   variant="primary"
                   size="sm"
                   onClick={() => setAdminApproved(true)}
-                  className="text-xs h-7 bg-[#057642] hover:bg-[#046237]"
+                  className="text-xs h-8 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
                   Approve &amp; Issue Verified Badge
                 </Button>

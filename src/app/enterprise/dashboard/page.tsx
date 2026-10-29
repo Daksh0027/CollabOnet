@@ -7,7 +7,10 @@ import {
   ArrowRightLeft, 
   ShieldAlert, 
   Sparkles, 
-  CheckCircle2
+  CheckCircle2,
+  TrendingUp,
+  Layers,
+  ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -63,122 +66,125 @@ export default function EnterpriseDashboardPage() {
     : branches.filter((b) => b.id === selectedBranchId);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Enterprise Executive Header */}
-      <div className="linkedin-card p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-neutral-200/80">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-bold text-[#191919] tracking-tight">Enterprise Multi-Branch Executive Hub</h1>
-            <Badge variant="info" className="text-xs">Global CMO View</Badge>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 text-neutral-800 text-[11px] font-semibold tracking-wider uppercase mb-2 border border-neutral-200/60">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#0057FF]" />
+            Enterprise Governance
           </div>
-          <p className="text-xs text-[#5e5e5e]">
-            {SEED_ORGANIZATION.legalName} • Corporate Domain: {SEED_ORGANIZATION.corporateDomain}
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 tracking-tight">
+            Multi-Branch CMO Hub
+          </h1>
+          <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-xl font-mono">
+            {SEED_ORGANIZATION.legalName} • {SEED_ORGANIZATION.corporateDomain}
           </p>
         </div>
 
         <Button
           size="sm"
           onClick={() => setReassignModalOpen(true)}
-          className="gap-2 text-xs h-8"
+          className="rounded-full gap-2 text-xs h-9 px-5 bg-neutral-950 text-white hover:bg-neutral-800"
         >
-          <ArrowRightLeft className="h-3.5 w-3.5" />
-          Deal Succession Handover
+          <ArrowRightLeft className="h-3.5 w-3.5 text-[#0057FF]" />
+          <span>Succession Handover</span>
         </Button>
       </div>
 
-      {/* Top Level Metric Cards (KPI container split by 1px rules) */}
-      <div className="linkedin-card grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#e8e7e3]">
-        <div className="p-4 space-y-1">
-          <div className="text-xs text-[#5e5e5e]">Master Escrow Balance</div>
-          <div className="text-xl font-bold text-[#191919] tabular-nums">
+      {/* Top Level Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs space-y-1">
+          <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Master Escrow Vault</div>
+          <div className="text-2xl font-black text-neutral-950 tabular-nums">
             {formatCurrency(SEED_ORGANIZATION.billingPoolBalance)}
           </div>
-          <span className="text-[11px] text-[#057642] flex items-center gap-1">
+          <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
             <CheckCircle2 className="h-3 w-3" />
-            Centralized Global Wallet
+            Global Treasury Synced
           </span>
         </div>
 
-        <div className="p-4 space-y-1">
-          <div className="text-xs text-[#5e5e5e]">Active Regional Branches</div>
-          <div className="text-xl font-bold text-[#191919] tabular-nums">
-            3 Workspaces
+        <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs space-y-1">
+          <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Active Regional Branches</div>
+          <div className="text-2xl font-black text-neutral-950 tabular-nums">
+            3 Hubs
           </div>
-          <span className="text-[11px] text-[#5e5e5e]">NA, APAC, EMEA</span>
+          <span className="text-[11px] text-neutral-400 font-mono">NA • APAC • EMEA</span>
         </div>
 
-        <div className="p-4 space-y-1">
-          <div className="text-xs text-[#5e5e5e]">Total Monthly Spend</div>
-          <div className="text-xl font-bold text-[#0a66c2] tabular-nums">
+        <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs space-y-1">
+          <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Total Monthly Spend</div>
+          <div className="text-2xl font-black text-[#0057FF] tabular-nums">
             {formatCurrency(144700)}
           </div>
-          <span className="text-[11px] text-[#5e5e5e]">58% of Allocated Pool</span>
+          <span className="text-[11px] text-neutral-400">58% of Allocated Pool</span>
         </div>
 
-        <div className="p-4 space-y-1">
-          <div className="text-xs text-[#5e5e5e]">Rival Exclusivity Conflicts</div>
-          <div className="text-xl font-bold text-[#915907] tabular-nums">
+        <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs space-y-1">
+          <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Exclusivity Conflicts</div>
+          <div className="text-2xl font-black text-amber-600 tabular-nums">
             2 Detected
           </div>
-          <span className="text-[11px] text-[#915907]">Puma and Under Armour Scans</span>
+          <span className="text-[11px] text-amber-700">Rival Cooling Periods Tracked</span>
         </div>
       </div>
 
       {/* Regional Branches Breakdown */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold text-[#191919]">Regional Branch Budgets &amp; Activity</h2>
-          <div className="flex items-center gap-1 bg-[#f4f2ee] p-1 rounded border border-[#e0dfdc]">
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h2 className="text-base font-bold text-neutral-950">Regional Branch Budgets &amp; Allocation</h2>
+          <div className="flex items-center gap-1.5 bg-neutral-100 p-1 rounded-full border border-neutral-200/60">
             {['ALL', 'branch_nike_na', 'branch_nike_apac', 'branch_nike_emea'].map((id) => (
               <button
                 key={id}
                 onClick={() => setSelectedBranchId(id)}
-                className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
+                className={`px-3.5 py-1 text-xs rounded-full font-medium transition-all cursor-pointer ${
                   selectedBranchId === id
-                    ? 'bg-white text-[#0a66c2] border border-[#e0dfdc]'
-                    : 'text-[#5e5e5e] hover:text-[#191919]'
+                    ? 'bg-neutral-950 text-white shadow-xs'
+                    : 'text-neutral-500 hover:text-neutral-950'
                 }`}
               >
-                {id === 'ALL' ? 'All Branches' : id.replace('branch_nike_', '').toUpperCase()}
+                {id === 'ALL' ? 'All Hubs' : id.replace('branch_nike_', '').toUpperCase()}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filteredBranches.map((b) => {
             const usagePercent = Math.round((b.spentThisMonth / b.monthlyBudgetAllocation) * 100);
 
             return (
-              <div key={b.id} className="linkedin-card p-4 space-y-3">
+              <div key={b.id} className="bg-white rounded-3xl border border-neutral-200/80 p-6 shadow-xs space-y-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-bold text-sm text-[#191919]">{b.branchName}</h3>
-                    <p className="text-xs text-[#5e5e5e]">{b.locationCity}, {b.locationCountry}</p>
+                    <h3 className="font-bold text-base text-neutral-950">{b.branchName}</h3>
+                    <p className="text-xs text-neutral-400 font-mono mt-0.5">{b.locationCity}, {b.locationCountry}</p>
                   </div>
-                  <Badge variant="outline" className="text-[10px] tabular-nums">
+                  <Badge variant="outline" className="text-[10px] tabular-nums font-mono">
                     {usagePercent}% utilized
                   </Badge>
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <div className="flex justify-between text-xs tabular-nums">
-                    <span className="text-[#5e5e5e]">Spent: {formatCurrency(b.spentThisMonth)}</span>
-                    <span className="text-[#191919] font-semibold">Max: {formatCurrency(b.monthlyBudgetAllocation)}</span>
+                    <span className="text-neutral-400">Disbursed: {formatCurrency(b.spentThisMonth)}</span>
+                    <span className="text-neutral-950 font-bold">Cap: {formatCurrency(b.monthlyBudgetAllocation)}</span>
                   </div>
-                  <div className="h-2 w-full bg-[#f4f2ee] rounded-full overflow-hidden border border-[#e0dfdc]">
+                  <div className="h-1.5 w-full bg-neutral-100 rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-colors ${
-                        usagePercent > 80 ? 'bg-[#915907]' : 'bg-[#0a66c2]'
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        usagePercent > 80 ? 'bg-amber-500' : 'bg-[#0057FF]'
                       }`}
                       style={{ width: `${usagePercent}%` }}
                     />
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-[#f0f0f0] flex items-center justify-between text-xs text-[#5e5e5e]">
-                  <span>Reps: <strong>4 Deal Owners</strong></span>
-                  <span className="text-[#057642] font-semibold">Active Deals: 3</span>
+                <div className="pt-3 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-400">
+                  <span>Authorized Reps: <strong className="text-neutral-700">4</strong></span>
+                  <span className="text-emerald-700 font-medium">3 Active Contracts</span>
                 </div>
               </div>
             );
@@ -186,33 +192,33 @@ export default function EnterpriseDashboardPage() {
         </div>
       </div>
 
-      {/* Rival Intelligence Radar & Executive ROI */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="linkedin-card p-4 space-y-3">
-          <div className="flex items-center justify-between border-b border-[#f0f0f0] pb-2">
-            <h2 className="text-sm font-bold text-[#191919] flex items-center gap-2">
-              <ShieldAlert className="h-4 w-4 text-[#915907]" />
+      {/* Rival Intelligence & Performance Benchmarking */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-3xl border border-neutral-200/80 p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+            <h2 className="text-sm font-bold text-neutral-950 flex items-center gap-2">
+              <ShieldAlert className="h-4 w-4 text-amber-600" />
               Competitor Sponsorship Radar
             </h2>
-            <Badge variant="warning" className="text-[10px]">Automated Ad Scan</Badge>
+            <Badge variant="warning" className="text-[10px]">Automated Scans</Badge>
           </div>
-          <p className="text-xs text-[#5e5e5e]">
-            WorkerSocial scanner actively monitors competitor keywords ({SEED_ORGANIZATION.competitorKeywords.join(', ')}) across YouTube and Instagram:
+          <p className="text-xs text-neutral-500">
+            Continuous social monitoring on competitor keywords: <span className="font-mono text-neutral-800 font-semibold">{SEED_ORGANIZATION.competitorKeywords.join(', ')}</span>.
           </p>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {SEED_COMPETITOR_RADAR.map((item) => (
-              <div key={item.id} className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-1 text-xs">
+              <div key={item.id} className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-1.5 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-[#191919]">Rival Brand: {item.competitorBrandName}</span>
+                  <span className="font-bold text-neutral-950">Brand Conflict: {item.competitorBrandName}</span>
                   <Badge variant={item.exclusivityDaysRemaining ? 'destructive' : 'secondary'} className="text-[10px]">
-                    {item.exclusivityDaysRemaining ? `${item.exclusivityDaysRemaining}d Exclusivity Left` : 'Cooling Expired'}
+                    {item.exclusivityDaysRemaining ? `${item.exclusivityDaysRemaining}d Remaining` : 'Expired'}
                   </Badge>
                 </div>
-                <div className="text-[11px] text-[#5e5e5e]">
+                <div className="text-[11px] text-neutral-400 font-mono">
                   Platform: {item.platform} • Method: {item.detectedVia}
                 </div>
-                <a href={item.postUrl} target="_blank" rel="noreferrer" className="text-[11px] text-[#0a66c2] hover:underline block truncate">
+                <a href={item.postUrl} target="_blank" rel="noreferrer" className="text-[11px] text-[#0057FF] hover:underline block truncate font-mono">
                   {item.postUrl}
                 </a>
               </div>
@@ -220,32 +226,32 @@ export default function EnterpriseDashboardPage() {
           </div>
         </div>
 
-        <div className="linkedin-card p-4 space-y-3">
-          <div className="flex items-center justify-between border-b border-[#f0f0f0] pb-2">
-            <h2 className="text-sm font-bold text-[#191919] flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[#0a66c2]" />
-              Executive ROI &amp; Velocity Synthesizer
+        <div className="bg-white rounded-3xl border border-neutral-200/80 p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+            <h2 className="text-sm font-bold text-neutral-950 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-[#0057FF]" />
+              Executive Velocity Digest
             </h2>
             <Badge variant="accent" className="text-[10px]">Q4 AI Digest</Badge>
           </div>
-          <p className="text-xs text-[#5e5e5e]">
-            Performance benchmarking across regional offices:
+          <p className="text-xs text-neutral-500">
+            Algorithmic benchmark synthesis across global branches:
           </p>
 
-          <div className="space-y-2.5 text-xs text-[#191919]">
-            <div className="p-3 rounded bg-[#ebf4fd] border border-[#cce4f9] space-y-1">
-              <div className="font-semibold text-[#0a66c2]">Deal-Close Velocity:</div>
-              <p className="text-[#191919]">APAC branch closed deals 22% faster than EMEA this quarter with an average negotiation cycle of 2.4 days.</p>
+          <div className="space-y-3 text-xs">
+            <div className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-1">
+              <div className="font-bold text-neutral-950">Deal-Close Velocity:</div>
+              <p className="text-neutral-600 leading-relaxed">APAC branch closed deals 22% faster than EMEA this quarter with an average negotiation cycle of 2.4 days.</p>
             </div>
 
-            <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-1">
-              <div className="font-semibold text-[#191919]">Rate Efficiency Benchmark:</div>
-              <p className="text-[#5e5e5e]">North America branch is paying within 4% of market average for tech integrations, avoiding overpayment via Zero-Knowledge Collision radar.</p>
+            <div className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-1">
+              <div className="font-bold text-neutral-950">Rate Efficiency Benchmark:</div>
+              <p className="text-neutral-600 leading-relaxed">North America branch is paying within 4% of market average for tech integrations, avoiding overpayment via collision radar.</p>
             </div>
 
-            <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-1">
-              <div className="font-semibold text-[#191919]">Revision Friction:</div>
-              <p className="text-[#5e5e5e]">Contract-to-Approval turnaround maintained at 38 hours, well below the standard 48h automated platform cutoff window.</p>
+            <div className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-1">
+              <div className="font-bold text-neutral-950">Revision Friction:</div>
+              <p className="text-neutral-600 leading-relaxed">Turnaround maintained at 38 hours, well below the standard 48h automated platform cutoff window.</p>
             </div>
           </div>
         </div>
@@ -258,29 +264,29 @@ export default function EnterpriseDashboardPage() {
           setReassignModalOpen(false);
           setReassignSuccess(null);
         }}
-        title="Zero-Downtime Deal Reassignment"
+        title="Zero-Downtime Deal Succession"
         description="Transfer deal ownership to another representative and generate an AI handover briefing."
         className="max-w-xl"
       >
         {reassignSuccess ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <Alert variant="accent">
-              <CheckCircle2 className="h-4 w-4 text-[#057642]" />
+              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
               <AlertTitle>Deal Reassigned Successfully</AlertTitle>
               <AlertDescription>
                 Conversation access updated in database. The new representative can immediately chat with the creator without reading historical messages.
               </AlertDescription>
             </Alert>
 
-            <div className="p-3.5 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-1.5 text-xs">
-              <div className="font-semibold text-[#191919]">AI Handover Briefing:</div>
-              <div className="text-[#5e5e5e]">
+            <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-2 text-xs">
+              <div className="font-bold text-neutral-950">AI Handover Briefing:</div>
+              <div className="text-neutral-600">
                 <strong>Current Stage: </strong>
                 {reassignSuccess.handoverAuditLog?.handoverBriefSummary?.dealStage}
               </div>
-              <div className="text-[#5e5e5e]">
-                <strong>Immediate Action Items: </strong>
-                <ul className="list-disc list-inside mt-1 text-xs text-[#0a66c2]">
+              <div className="text-neutral-600">
+                <strong>Action Items: </strong>
+                <ul className="list-disc list-inside mt-1 text-xs text-[#0057FF]">
                   {reassignSuccess.handoverAuditLog?.handoverBriefSummary?.immediateActionItems?.map((a: string, i: number) => (
                     <li key={i}>{a}</li>
                   ))}
@@ -288,36 +294,37 @@ export default function EnterpriseDashboardPage() {
               </div>
             </div>
 
-            <div className="flex justify-end pt-2 border-t border-[#f0f0f0]">
+            <div className="flex justify-end pt-3 border-t border-neutral-100">
               <Button
                 variant="primary"
                 onClick={() => {
                   setReassignModalOpen(false);
                   setReassignSuccess(null);
                 }}
+                className="rounded-full bg-neutral-950 text-white"
               >
-                Done
+                Dismiss
               </Button>
             </div>
           </div>
         ) : (
-          <form onSubmit={handleExecuteReassignment} className="space-y-3">
+          <form onSubmit={handleExecuteReassignment} className="space-y-4">
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#191919]">Select Deal</label>
-              <div className="p-2.5 rounded bg-[#f9fafb] border border-[#e8e7e3] text-xs text-[#191919]">
+              <label className="text-xs font-bold text-neutral-900">Select Deal</label>
+              <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200 text-xs text-neutral-900 font-mono">
                 Rohan Tech Studio (Nike Air Max Pulse 2026) : Currently Alice Zhang
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#191919]">New Deal Owner</label>
+              <label className="text-xs font-bold text-neutral-900">New Deal Owner</label>
               <select
                 value={newRepId}
                 onChange={(e) => {
                   setNewRepId(e.target.value);
                   setNewRepName(e.target.value === 'user_rep_bob' ? 'Bob Miller (Sales Rep B)' : 'Charlie Gomez (APAC Rep)');
                 }}
-                className="w-full bg-white border border-[#b2b2b2] rounded p-2 text-xs text-[#191919] outline-none focus:border-[#0a66c2]"
+                className="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-xs text-neutral-900 outline-none focus:border-neutral-950"
               >
                 <option value="user_rep_bob">Bob Miller : North America Branch (Sales Rep B)</option>
                 <option value="user_rep_charlie">Charlie Gomez : APAC Branch (Sales Rep C)</option>
@@ -325,21 +332,21 @@ export default function EnterpriseDashboardPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#191919]">Reason for Succession</label>
+              <label className="text-xs font-bold text-neutral-900">Succession Justification</label>
               <textarea
                 value={handoverReason}
                 onChange={(e) => setHandoverReason(e.target.value)}
                 required
-                className="w-full bg-white border border-[#b2b2b2] rounded p-2 text-xs text-[#191919] outline-none focus:border-[#0a66c2] h-20"
+                className="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-xs text-neutral-900 outline-none focus:border-neutral-950 h-24"
               />
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-[#f0f0f0]">
-              <Button type="button" variant="outline" onClick={() => setReassignModalOpen(false)}>
+            <div className="flex justify-end gap-2 pt-3 border-t border-neutral-100">
+              <Button type="button" variant="outline" size="sm" onClick={() => setReassignModalOpen(false)} className="rounded-full">
                 Cancel
               </Button>
-              <Button type="submit" variant="primary" disabled={reassigning}>
-                {reassigning ? 'Generating Brief...' : 'Execute Reassignment'}
+              <Button type="submit" variant="primary" size="sm" disabled={reassigning} className="rounded-full bg-neutral-950 text-white">
+                {reassigning ? 'Generating Brief...' : 'Execute Succession'}
               </Button>
             </div>
           </form>

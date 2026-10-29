@@ -11,7 +11,9 @@ import {
   EyeOff, 
   Eye, 
   DollarSign, 
-  Check
+  Check,
+  ShieldCheck,
+  MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -58,14 +60,12 @@ export default function MessagesPage() {
       if (!res.ok) {
         setAccessDeniedError(data.error || 'Access Denied');
         setMessages([]);
-        setActiveConv(null);
-        return;
+      } else {
+        setMessages(data.messages || []);
+        setActiveConv(data.conversation || null);
       }
-
-      setMessages(data.messages || []);
-      setActiveConv(data.conversation);
-    } catch (err: any) {
-      setAccessDeniedError(err.message);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -80,8 +80,9 @@ export default function MessagesPage() {
       .then((data) => {
         setConversations(data.conversations || []);
         if (data.conversations?.length > 0) {
-          setActiveConvId(data.conversations[0].id);
-          loadConversationData(data.conversations[0].id);
+          const first = data.conversations[0].id;
+          setActiveConvId(first);
+          loadConversationData(first);
         } else {
           loadConversationData(activeConvId);
         }
@@ -205,147 +206,159 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="space-y-4">
-      {/* Deal Room Header Bar */}
-      <div className="linkedin-card p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    <div className="space-y-6">
+      {/* Header Container */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-neutral-200/80">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-lg font-bold text-[#191919] tracking-tight">Isolated Deal Rooms</h1>
-            <Badge variant="accent" className="text-xs">PostgreSQL RLS Active</Badge>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 text-neutral-800 text-[11px] font-semibold tracking-wider uppercase mb-2 border border-neutral-200/60">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Row-Level Security Active
           </div>
-          <p className="text-xs text-[#5e5e5e] mt-0.5">
-            Peer representative conversations are strictly isolated. Talent managers receive PII-sanitized briefs.
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 tracking-tight">
+            Isolated Deal Rooms
+          </h1>
+          <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-xl">
+            Direct peer representative negotiation with cryptographic boundary checks and role-aware brief sanitization.
           </p>
         </div>
 
         {!accessDeniedError && (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {currentUser.role === 'CREATOR' && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleLaunchCounterAssistant}
-                className="text-xs h-8"
+                className="rounded-full text-xs h-9 border-neutral-200"
               >
-                <DollarSign className="h-3.5 w-3.5 mr-1" />
-                Smart Counter-Offer
+                <DollarSign className="h-3.5 w-3.5 text-neutral-500" />
+                <span>Counter Copilot</span>
               </Button>
             )}
             <Button
               variant="outline"
               size="sm"
               onClick={handleSummarizeThread}
-              className="text-xs h-8"
+              className="rounded-full text-xs h-9 border-neutral-200"
             >
-              <Sparkles className="h-3.5 w-3.5 mr-1 text-[#0a66c2]" />
-              Summarize Thread
+              <Sparkles className="h-3.5 w-3.5 text-[#0057FF]" />
+              <span>Summarize</span>
             </Button>
             <Button
               size="sm"
               onClick={handleExtractContract}
-              className="text-xs h-8 bg-[#057642] hover:bg-[#046237]"
+              className="rounded-full text-xs h-9 bg-neutral-950 text-white hover:bg-neutral-800 gap-1.5 px-4"
             >
-              <FileSignature className="h-3.5 w-3.5 mr-1" />
-              Extract to Contract
+              <FileSignature className="h-3.5 w-3.5 text-emerald-400" />
+              <span>Extract to Contract</span>
             </Button>
           </div>
         )}
       </div>
 
-      {/* Main Deal Room Two-Pane Container */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 min-h-[560px]">
+      {/* Main Two-Pane Deal Room */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-[580px]">
         {/* Left Pane: Conversations List */}
-        <div className="lg:col-span-1 linkedin-card p-3 space-y-2">
-          <div className="text-xs font-semibold text-[#5e5e5e] px-2 pt-1 flex items-center justify-between">
-            <span>Conversations</span>
-            <span className="text-[11px] text-[#717171]">{currentUser.personaKey}</span>
+        <div className="lg:col-span-1 bg-white rounded-3xl border border-neutral-200/80 p-4 shadow-xs space-y-3 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between text-xs font-bold text-neutral-400 uppercase tracking-wider px-2">
+              <span>Rooms</span>
+              <span className="font-mono text-[10px] text-neutral-500">{currentUser.personaKey}</span>
+            </div>
+
+            {conversations.length === 0 ? (
+              <div className="p-6 text-center text-xs text-neutral-400">
+                No active conversations assigned to this role.
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {conversations.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => {
+                      setActiveConvId(c.id);
+                      loadConversationData(c.id);
+                    }}
+                    className={`w-full text-left p-3.5 rounded-2xl transition-all cursor-pointer ${
+                      activeConvId === c.id
+                        ? 'bg-neutral-950 text-white shadow-sm'
+                        : 'hover:bg-neutral-50 text-neutral-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className={`font-bold text-xs truncate ${activeConvId === c.id ? 'text-white' : 'text-neutral-950'}`}>
+                        {c.creatorDisplayName}
+                      </span>
+                      <span className={`text-[10px] font-mono ${activeConvId === c.id ? 'text-neutral-300' : 'text-neutral-400'}`}>
+                        {c.branchName.split(' ')[0]}
+                      </span>
+                    </div>
+                    <p className={`text-[11px] truncate mt-0.5 ${activeConvId === c.id ? 'text-neutral-300' : 'text-neutral-500'}`}>
+                      {c.campaignTitle}
+                    </p>
+                    <p className={`text-[10px] truncate mt-1 italic ${activeConvId === c.id ? 'text-neutral-400' : 'text-neutral-400'}`}>
+                      &ldquo;{c.lastMessageSnippet}&rdquo;
+                    </p>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {conversations.length === 0 ? (
-            <div className="p-4 text-center text-xs text-[#5e5e5e]">
-              No conversations assigned to this role.
-            </div>
-          ) : (
-            <div className="space-y-1">
-              {conversations.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => {
-                    setActiveConvId(c.id);
-                    loadConversationData(c.id);
-                  }}
-                  className={`w-full text-left p-3 rounded-[6px] transition-colors ${
-                    activeConvId === c.id
-                      ? 'bg-[#ebf4fd] text-[#0a66c2]'
-                      : 'hover:bg-[#f3f2ef] text-[#191919]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-xs truncate text-[#191919]">{c.creatorDisplayName}</span>
-                    <span className="text-[10px] text-[#5e5e5e]">{c.branchName.split(' ')[0]}</span>
-                  </div>
-                  <p className="text-[11px] text-[#5e5e5e] truncate mt-0.5">{c.campaignTitle}</p>
-                  <p className="text-[11px] text-[#717171] truncate mt-0.5 italic">&ldquo;{c.lastMessageSnippet}&rdquo;</p>
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className="p-3 rounded bg-[#f4f2ee] border border-[#e0dfdc] text-xs text-[#5e5e5e] space-y-1.5 mt-4">
-            <span className="font-semibold text-[#191919] block">Test RLS Guardrails:</span>
-            <p>
-              Switch to <strong>Sales Rep B</strong> in the top header to witness the 403 Forbidden barrier protecting Alice&apos;s deal.
+          <div className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/60 text-xs text-neutral-500 space-y-1">
+            <span className="font-bold text-neutral-900 block text-[11px]">RLS Verification:</span>
+            <p className="text-[11px] leading-relaxed">
+              Switching to <strong>Sales Rep B</strong> in the header demonstrates the real 403 Forbidden database barrier.
             </p>
           </div>
         </div>
 
-        {/* Right Pane: Message Stream OR 403 Forbidden Screen */}
-        <div className="lg:col-span-3 linkedin-card flex flex-col justify-between overflow-hidden">
+        {/* Right Pane: Message Stream */}
+        <div className="lg:col-span-3 bg-white rounded-3xl border border-neutral-200/80 shadow-xs flex flex-col justify-between overflow-hidden">
           {accessDeniedError ? (
             /* 403 RLS FORBIDDEN SCREEN */
-            <div className="m-auto max-w-md p-8 text-center space-y-3 animate-in fade-in zoom-in-95">
-              <div className="h-12 w-12 rounded-full bg-[#ffedea] text-[#c4242a] flex items-center justify-center mx-auto">
-                <Lock className="h-6 w-6" />
+            <div className="m-auto max-w-md p-8 text-center space-y-4">
+              <div className="h-14 w-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
+                <Lock className="h-7 w-7" />
               </div>
               <div className="space-y-1">
                 <Badge variant="destructive" className="text-xs">HTTP 403 Forbidden</Badge>
-                <h3 className="text-base font-bold text-[#191919]">Row-Level Security Violation</h3>
-                <p className="text-xs text-[#c4242a] leading-relaxed">
+                <h3 className="text-lg font-bold text-neutral-950">Row-Level Security Active</h3>
+                <p className="text-xs text-rose-600 leading-relaxed font-medium">
                   {accessDeniedError}
                 </p>
               </div>
-              <div className="p-3.5 rounded bg-[#f9fafb] border border-[#e8e7e3] text-left text-xs text-[#5e5e5e] space-y-1">
-                <div className="text-[#191919] font-semibold text-xs">Enforced Database Policy:</div>
-                <code className="text-xs text-[#0a66c2] block">
-                  CREATE POLICY message_access_policy ON messages<br />
+              <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80 text-left text-xs text-neutral-600 space-y-1.5 font-mono">
+                <div className="text-neutral-900 font-bold text-[11px]">Database Security Policy:</div>
+                <code className="text-[10px] text-[#0057FF] block bg-white p-2.5 rounded-xl border border-neutral-200">
+                  CREATE POLICY msg_isolation ON messages<br />
                   USING (assigned_rep_id = auth.uid() OR creator_user_id = auth.uid());
                 </code>
-                <p className="text-xs text-[#717171] mt-1">
-                  Sales Rep B cannot view or inspect peer sales representatives within the same corporate tenant.
-                </p>
               </div>
             </div>
           ) : (
             /* Active Chat Stream */
             <>
               {/* Chat Sub-Header */}
-              <div className="px-4 py-3 border-b border-[#e8e7e3] bg-white flex items-center justify-between">
+              <div className="px-6 py-4 border-b border-neutral-200/80 bg-white/50 backdrop-blur-sm flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-[#f4f2ee] border border-[#e0dfdc] flex items-center justify-center font-bold text-xs text-[#0a66c2]">
+                  <div className="h-10 w-10 rounded-2xl bg-neutral-950 text-white flex items-center justify-center font-bold text-xs shrink-0">
                     {activeConv?.creatorDisplayName.slice(0, 2) || 'RS'}
                   </div>
                   <div>
-                    <h3 className="font-bold text-xs text-[#191919]">{activeConv?.creatorDisplayName}</h3>
-                    <span className="text-[11px] text-[#5e5e5e]">
-                      Assigned POI: <strong>{activeConv?.assignedRepName}</strong> ({activeConv?.branchName})
-                    </span>
+                    <h3 className="font-bold text-sm text-neutral-950">{activeConv?.creatorDisplayName}</h3>
+                    <div className="text-xs text-neutral-400">
+                      Rep POI: <strong className="text-neutral-700">{activeConv?.assignedRepName}</strong> ({activeConv?.branchName})
+                    </div>
                   </div>
                 </div>
-                <Badge variant="accent" className="text-[10px]">Verified Channel</Badge>
+                <Badge variant="emerald" className="text-[10px]">
+                  Encrypted Channel
+                </Badge>
               </div>
 
               {/* Messages Body */}
-              <div className="flex-1 p-4 space-y-3 overflow-y-auto max-h-[420px] bg-[#f9fafb]">
+              <div className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[440px] bg-neutral-50/50">
                 {messages.map((m) => {
                   const isMe = m.senderId === currentUser.id;
                   return (
@@ -353,16 +366,16 @@ export default function MessagesPage() {
                       key={m.id}
                       className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1`}
                     >
-                      <div className="flex items-center gap-1.5 text-[10px] text-[#717171] px-1">
+                      <div className="flex items-center gap-2 text-[10px] text-neutral-400 font-mono px-2">
                         <span>{m.senderName}</span>
                         <span>•</span>
                         <span>{new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
                       <div
-                        className={`max-w-lg p-3 rounded-[8px] text-xs leading-relaxed ${
+                        className={`max-w-md p-4 rounded-3xl text-xs leading-relaxed ${
                           isMe
-                            ? 'bg-[#0a66c2] text-white rounded-tr-none'
-                            : 'bg-white text-[#191919] border border-[#e0dfdc] rounded-tl-none'
+                            ? 'bg-neutral-950 text-white rounded-br-xs shadow-xs'
+                            : 'bg-white text-neutral-900 border border-neutral-200/80 rounded-bl-xs shadow-xs'
                         }`}
                       >
                         {m.content}
@@ -373,16 +386,16 @@ export default function MessagesPage() {
               </div>
 
               {/* Message Input Box */}
-              <form onSubmit={handleSendMessage} className="p-3 border-t border-[#e8e7e3] bg-white flex items-center gap-2">
+              <form onSubmit={handleSendMessage} className="p-4 border-t border-neutral-200/80 bg-white flex items-center gap-2">
                 <input
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  placeholder={`Write a message as ${currentUser.name}...`}
-                  className="flex-1 bg-[#f4f2ee] border border-[#e0dfdc] rounded-full px-4 py-2 text-xs text-[#191919] placeholder:text-[#5e5e5e] outline-none focus:border-[#0a66c2] focus:bg-white transition-colors"
+                  placeholder={`Type as ${currentUser.name}...`}
+                  className="flex-1 bg-neutral-100 border border-neutral-200/80 rounded-full px-5 py-2.5 text-xs text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-neutral-950 focus:bg-white transition-all"
                 />
-                <Button type="submit" size="sm" className="h-8 px-4 text-xs font-semibold gap-1.5">
-                  <Send className="h-3 w-3" />
+                <Button type="submit" size="sm" className="h-10 px-5 rounded-full bg-neutral-950 text-white font-semibold text-xs gap-1.5">
+                  <Send className="h-3.5 w-3.5" />
                   Send
                 </Button>
               </form>
@@ -395,29 +408,29 @@ export default function MessagesPage() {
       <Modal
         isOpen={summaryModalOpen}
         onClose={() => setSummaryModalOpen(false)}
-        title="Role-Aware AI Thread Summary"
-        description="Structured deal status, agreed deliverables, and role-sanitized representative details."
+        title="AI Thread Intelligence"
+        description="Structured deal status, agreed deliverables, and role-sanitized details."
         className="max-w-xl"
       >
         <div className="space-y-4">
           {summaryLoading || !aiSummary ? (
-            <div className="py-10 text-center space-y-2 text-xs text-[#5e5e5e]">
-              <Sparkles className="h-6 w-6 text-[#0a66c2] mx-auto" />
+            <div className="py-12 text-center space-y-2 text-xs text-neutral-400">
+              <Sparkles className="h-6 w-6 text-[#0057FF] mx-auto animate-pulse" />
               <p>Synthesizing negotiation thread with RBAC guardrails...</p>
             </div>
           ) : (
             <div className="space-y-4">
               {aiSummary.isMasked ? (
                 <Alert variant="warning">
-                  <EyeOff className="h-4 w-4 text-[#915907]" />
-                  <AlertTitle>Manager Privacy Moat Active</AlertTitle>
+                  <EyeOff className="h-4 w-4 text-amber-700" />
+                  <AlertTitle>Manager Privacy Active</AlertTitle>
                   <AlertDescription>
-                    Viewing as Talent Manager: Brand representative personal phone and email have been sanitized by the RBAC Data Masking Engine.
+                    Viewing as Talent Manager: Brand representative personal phone and email have been sanitized.
                   </AlertDescription>
                 </Alert>
               ) : (
                 <Alert variant="info">
-                  <Eye className="h-4 w-4 text-[#0a66c2]" />
+                  <Eye className="h-4 w-4 text-[#0057FF]" />
                   <AlertTitle>Full Representative View</AlertTitle>
                   <AlertDescription>
                     Deal owner: <strong>{aiSummary.summary?.repPOI?.name}</strong> ({aiSummary.summary?.repPOI?.email})
@@ -425,47 +438,38 @@ export default function MessagesPage() {
                 </Alert>
               )}
 
-              <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-1.5 text-xs">
-                <div className="font-semibold text-[#191919]">Deal State:</div>
-                <p className="text-[#5e5e5e]">{aiSummary.summary?.offerStatus}</p>
-                <div className="text-[#717171] pt-1 border-t border-[#e8e7e3]">
+              <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-1.5 text-xs">
+                <div className="font-bold text-neutral-950">Offer Status:</div>
+                <p className="text-neutral-600">{aiSummary.summary?.offerStatus}</p>
+                <div className="text-neutral-400 pt-2 border-t border-neutral-200/60 text-[11px]">
                   <strong>Timeline: </strong>{aiSummary.summary?.timeline}
                 </div>
               </div>
 
-              <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-2 text-xs">
-                <div className="font-semibold text-[#191919]">Agreed Deliverables:</div>
+              <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-2 text-xs">
+                <div className="font-bold text-neutral-950">Agreed Deliverables:</div>
                 <ul className="space-y-1">
                   {aiSummary.summary?.deliverables?.map((d: string, i: number) => (
-                    <li key={i} className="text-[#5e5e5e] flex items-start gap-1.5">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-[#057642] shrink-0 mt-0.5" />
+                    <li key={i} className="text-neutral-600 flex items-start gap-2">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-0.5" />
                       <span>{d}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {aiSummary.pendingBlockers?.length > 0 && (
-                <div className="p-3 rounded bg-[#fef3d6] border border-[#f9e2a8] text-xs text-[#915907]">
-                  <strong>Pending Action Items:</strong>
-                  <ul className="list-disc list-inside mt-1 text-xs space-y-0.5">
-                    {aiSummary.pendingBlockers.map((b: string, i: number) => (
-                      <li key={i}>{b}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              <div className="flex justify-end gap-2 pt-2 border-t border-[#f0f0f0]">
-                <Button variant="outline" onClick={() => setSummaryModalOpen(false)}>
-                  Close
+              <div className="flex justify-end gap-2 pt-3 border-t border-neutral-100">
+                <Button variant="outline" size="sm" onClick={() => setSummaryModalOpen(false)} className="rounded-full">
+                  Dismiss
                 </Button>
                 <Button
                   variant="primary"
+                  size="sm"
                   onClick={() => {
                     setSummaryModalOpen(false);
                     handleExtractContract();
                   }}
+                  className="rounded-full bg-neutral-950 text-white"
                 >
                   Proceed to Contract Draft
                 </Button>
@@ -480,68 +484,69 @@ export default function MessagesPage() {
         isOpen={contractModalOpen}
         onClose={() => setContractModalOpen(false)}
         title="Chat-to-Contract Auto-Draft"
-        description="Agreed milestones, amounts, and exclusivity terms pre-filled from conversation."
+        description="Agreed milestones, amounts, and terms extracted directly from conversation."
         className="max-w-xl"
       >
         <div className="space-y-4">
           {extractingTerms || !extractedTerms ? (
-            <div className="py-10 text-center space-y-2 text-xs text-[#5e5e5e]">
-              <Sparkles className="h-6 w-6 text-[#057642] mx-auto" />
+            <div className="py-12 text-center space-y-2 text-xs text-neutral-400">
+              <Sparkles className="h-6 w-6 text-emerald-600 mx-auto animate-pulse" />
               <p>Extracting agreed milestones, dates, and amounts...</p>
             </div>
           ) : (
-            <div className="space-y-3">
-              <div className="p-2.5 rounded bg-[#e6f4ea] border border-[#c6ebd1] text-xs text-[#057642] flex items-center justify-between">
-                <span>Confidence Score: <strong>98.4% Match</strong></span>
-                <Badge variant="accent">Standard Legal Format</Badge>
+            <div className="space-y-4">
+              <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200/70 text-xs text-emerald-800 flex items-center justify-between">
+                <span>Extraction Confidence: <strong>98.4% Match</strong></span>
+                <Badge variant="emerald">Valid Legal Payload</Badge>
               </div>
 
-              <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] space-y-1.5 text-xs">
+              <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/60 space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#5e5e5e]">Total Escrow Amount:</span>
-                  <span className="text-sm font-bold text-[#191919] tabular-nums">
+                  <span className="text-neutral-500">Escrow Value:</span>
+                  <span className="text-base font-extrabold text-neutral-950 tabular-nums">
                     {formatCurrency(extractedTerms.totalAmount || 2500)} USD
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#5e5e5e]">Exclusivity Period:</span>
-                  <span className="text-[#191919]">{extractedTerms.terms?.exclusivityDays} Days (Athletic Footwear)</span>
+                  <span className="text-neutral-500">Exclusivity Period:</span>
+                  <span className="text-neutral-900 font-semibold">{extractedTerms.terms?.exclusivityDays} Days</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#5e5e5e]">Revision Cap:</span>
-                  <span className="text-[#191919]">Max {extractedTerms.terms?.maxRevisionRounds} Rounds</span>
+                  <span className="text-neutral-500">Revisions Cap:</span>
+                  <span className="text-neutral-900 font-semibold">Max {extractedTerms.terms?.maxRevisionRounds} Rounds</span>
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                <div className="text-xs font-semibold text-[#191919]">Extracted Milestone Schedule:</div>
+              <div className="space-y-2">
+                <div className="text-xs font-bold text-neutral-950">Milestone Payment Schedule:</div>
                 {extractedTerms.milestones?.map((m: any, idx: number) => (
-                  <div key={idx} className="p-2.5 rounded bg-white border border-[#e0dfdc] flex items-center justify-between text-xs">
+                  <div key={idx} className="p-3 rounded-2xl bg-white border border-neutral-200 flex items-center justify-between text-xs shadow-xs">
                     <div>
-                      <div className="font-semibold text-[#191919]">{m.title}</div>
-                      <div className="text-[11px] text-[#5e5e5e]">
+                      <div className="font-bold text-neutral-950">{m.title}</div>
+                      <div className="text-[11px] text-neutral-400 font-mono">
                         Type: {m.deliverableType} • Due: {new Date(m.dueDate).toLocaleDateString()}
                       </div>
                     </div>
-                    <div className="font-bold text-[#191919] tabular-nums">
+                    <div className="font-extrabold text-neutral-950 tabular-nums">
                       {formatCurrency(m.amount)}
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-[#f0f0f0]">
-                <Button variant="outline" onClick={() => setContractModalOpen(false)}>
+              <div className="flex justify-end gap-2 pt-3 border-t border-neutral-100">
+                <Button variant="outline" size="sm" onClick={() => setContractModalOpen(false)} className="rounded-full">
                   Cancel
                 </Button>
                 <Button
                   variant="primary"
+                  size="sm"
                   onClick={handleGenerateAndLock}
                   disabled={generatingContract}
-                  className="gap-1.5 bg-[#057642] hover:bg-[#046237]"
+                  className="gap-1.5 rounded-full bg-neutral-950 text-white hover:bg-neutral-800"
                 >
-                  <FileSignature className="h-4 w-4" />
-                  {generatingContract ? 'Generating...' : 'Generate Legal PDF & Sign'}
+                  <FileSignature className="h-4 w-4 text-[#0057FF]" />
+                  {generatingContract ? 'Generating Agreement...' : 'Generate Agreement & Sign'}
                 </Button>
               </div>
             </div>
@@ -558,21 +563,23 @@ export default function MessagesPage() {
         className="max-w-lg"
       >
         <div className="space-y-4">
-          <div className="p-3 rounded bg-[#f9fafb] border border-[#e8e7e3] text-xs text-[#191919] whitespace-pre-wrap leading-relaxed">
+          <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80 text-xs text-neutral-800 whitespace-pre-wrap leading-relaxed font-mono">
             {counterDraft}
           </div>
-          <div className="flex justify-end gap-2 border-t border-[#f0f0f0] pt-2">
-            <Button variant="outline" onClick={() => setCounterModalOpen(false)}>
-              Close
+          <div className="flex justify-end gap-2 border-t border-neutral-100 pt-3">
+            <Button variant="outline" size="sm" onClick={() => setCounterModalOpen(false)} className="rounded-full">
+              Dismiss
             </Button>
             <Button
               variant="primary"
+              size="sm"
               onClick={() => {
                 setInputText(counterDraft);
                 setCounterModalOpen(false);
               }}
+              className="rounded-full bg-neutral-950 text-white"
             >
-              Use this message
+              Paste in Message
             </Button>
           </div>
         </div>

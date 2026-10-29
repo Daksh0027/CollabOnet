@@ -93,6 +93,7 @@ export interface CreatorProfile {
   aiBrandSafetyScore: number;
   isOpenForCollabs: boolean;
   avatarUrl?: string;
+  coverImageUrl?: string;
   portfolioSamples: Array<{
     title: string;
     views: string;
