@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f4f2ee;
+  --foreground: #191919;
+  --card: #ffffff;
+  --card-foreground: #191919;
+  --primary: #0a66c2;
+  --primary-foreground: #ffffff;
+  --primary-hover: #004182;
+  --secondary: #edf3f8;
+  --secondary-foreground: #0a66c2;
+  --muted: #f3f2ef;
+  --muted-foreground: #5e5e5e;
+  --accent: #057642;
+  --accent-foreground: #ffffff;
+  --destructive: #c4242a;
+  --destructive-foreground: #ffffff;
+  --border: #e0dfdc;
+  --rule: #f0f0f0;
+  --ring: #0a66c2;
+  --radius: 8px;
+}
+
+body {
+  color: #191919;
+  background-color: #f4f2ee;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tabular figures on numbers and financial values */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom crisp scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f4f2ee;
+}
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+/* LinkedIn clean flat surface card */
+.linkedin-card {
+  background: #ffffff;
+  border: 1px solid #e0dfdc;
+  border-radius: 8px;
+}
+
+.linkedin-divider {
+  border-top: 1px solid #f0f0f0;
+}
