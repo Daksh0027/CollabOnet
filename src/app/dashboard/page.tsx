@@ -4,14 +4,17 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
+  Bookmark,
   Building2,
   CalendarDays,
+  CalendarPlus,
   Check,
   ChevronDown,
   CircleCheck,
   FileCheck2,
   LayoutDashboard,
   LockKeyhole,
+  MapPin,
   Menu,
   MessageSquareText,
   Search,
@@ -34,6 +37,7 @@ import { formatCurrency } from '@/lib/utils';
 type PersonaKey = keyof typeof PRESET_PERSONAS;
 type DashboardTab = 'overview' | 'work' | 'activity';
 type DashboardSection = 'overview' | 'creators' | 'messages' | 'contracts' | 'calendar' | 'collabs' | 'branches' | 'trust' | 'cases';
+type CreatorFeedFilter = 'all' | 'campaigns' | 'events';
 
 interface Metric {
   label: string;
@@ -66,6 +70,78 @@ const conversation = SEED_CONVERSATIONS[0];
 const creatorReview = contract.milestones.find((item) => item.status === 'SUBMITTED');
 const branchSpend = SEED_BRANCHES.reduce((sum, branch) => sum + branch.spentThisMonth, 0);
 
+const CREATOR_FEED_CAMPAIGNS = [
+  {
+    id: 'mock-nike-city-movement',
+    publisher: 'Nike Global',
+    publisherType: 'Brand',
+    title: 'Move through the city',
+    description: 'Show how your everyday route changes when you build movement into the commute. Looking for a grounded, first-person story rather than a product review.',
+    budget: '$1,500–$3,500',
+    niches: ['Lifestyle', 'Fitness'],
+    platforms: ['Instagram', 'YouTube'],
+    deadline: 'Nov 30, 2026',
+    posted: 'Posted today',
+  },
+  {
+    id: 'mock-northstar-creator-kit',
+    publisher: 'Northstar Creator Studio',
+    publisherType: 'Agency',
+    title: 'A better desk, one small upgrade at a time',
+    description: 'Build a practical desk refresh around one useful piece of tech. The brief welcomes honest trade-offs, natural lighting, and a setup your audience can recreate.',
+    budget: '$900–$1,800',
+    niches: ['Tech', 'Design'],
+    platforms: ['YouTube', 'Instagram'],
+    deadline: 'Nov 18, 2026',
+    posted: 'Posted yesterday',
+  },
+  {
+    id: 'mock-goodfolk-weekend',
+    publisher: 'Goodfolk Creative',
+    publisherType: 'Agency',
+    title: 'Weekend miles, real routines',
+    description: 'A short-form series about making time for a run in a busy week. Creators who can tell a candid fitness story are encouraged to respond.',
+    budget: '$600–$1,200',
+    niches: ['Fitness', 'Lifestyle'],
+    platforms: ['Instagram'],
+    deadline: 'Nov 12, 2026',
+    posted: 'Posted 2 days ago',
+  },
+] as const;
+
+const CREATOR_FEED_EVENTS = [
+  {
+    id: 'mock-mumbai-creator-run',
+    publisher: 'Nike Community',
+    title: 'Mumbai 10K creator morning',
+    description: 'Join the community run, meet the local crew, and capture the city before it gets busy.',
+    location: 'Bandra Fort, Mumbai',
+    date: 'Nov 14, 2026',
+    time: '6:00 AM IST',
+    category: 'Community run',
+  },
+  {
+    id: 'mock-bengaluru-portfolio-night',
+    publisher: 'Morrow Design Co.',
+    title: 'Creator portfolio night',
+    description: 'An evening for independent creators to share work, trade notes, and meet the Morrow studio team.',
+    location: 'Indiranagar, Bengaluru',
+    date: 'Nov 20, 2026',
+    time: '6:30 PM IST',
+    category: 'Creator meetup',
+  },
+  {
+    id: 'mock-delhi-studio-workshop',
+    publisher: 'Northstar Creator Studio',
+    title: 'Short-form storytelling lab',
+    description: 'A small-group workshop on shaping an idea into a clear 30-second story, with time to shoot a first take.',
+    location: 'Hauz Khas, New Delhi',
+    date: 'Nov 28, 2026',
+    time: '11:00 AM IST',
+    category: 'Workshop',
+  },
+] as const;
+
 function getWorkspaceConfig(persona: UserPersona): WorkspaceConfig {
   const sharedNavigation = {
     overview: { label: 'Overview', href: '/dashboard', icon: LayoutDashboard, section: 'overview' as const },
@@ -89,7 +165,7 @@ function getWorkspaceConfig(persona: UserPersona): WorkspaceConfig {
       tabs: { overview: 'Overview', work: 'Deliverables', activity: 'Activity' },
       navigation: [
         sharedNavigation.overview,
-        sharedNavigation.creators,
+        { ...sharedNavigation.creators, label: 'Campaigns & events' },
         sharedNavigation.collabs,
         sharedNavigation.messages,
         sharedNavigation.contracts,
@@ -358,6 +434,142 @@ function BranchPortfolio() {
   );
 }
 
+function CreatorOpportunityFeed() {
+  const [filter, setFilter] = useState<CreatorFeedFilter>('all');
+  const [savedCampaigns, setSavedCampaigns] = useState<string[]>([]);
+  const [interestedCampaigns, setInterestedCampaigns] = useState<string[]>([]);
+  const [addedEvents, setAddedEvents] = useState<string[]>([]);
+  const showCampaigns = filter !== 'events';
+  const showEvents = filter !== 'campaigns';
+
+  const toggleItem = (items: string[], id: string, update: (next: string[]) => void) => {
+    update(items.includes(id) ? items.filter((item) => item !== id) : [...items, id]);
+  };
+
+  return (
+    <div className={`creator-opportunity-feed is-${filter}`}>
+      <div className="creator-feed-toolbar">
+        <div className="creator-feed-filters" role="group" aria-label="Filter opportunities">
+          {([
+            ['all', 'All opportunities'],
+            ['campaigns', 'Campaigns'],
+            ['events', 'Events'],
+          ] as const).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={filter === value}
+              className={filter === value ? 'is-active' : ''}
+              onClick={() => setFilter(value)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <p>Sample listings from brands and agencies · demo only</p>
+      </div>
+
+      <div className="creator-opportunity-layout">
+        {showCampaigns && (
+          <section className="creator-feed-section" aria-labelledby="creator-campaigns-title">
+            <div className="creator-feed-section-heading">
+              <div>
+                <h2 id="creator-campaigns-title">Campaign briefs</h2>
+                <p>Paid opportunities looking for creators like you.</p>
+              </div>
+              <span>{CREATOR_FEED_CAMPAIGNS.length} open</span>
+            </div>
+            <div className="creator-campaign-list">
+              {CREATOR_FEED_CAMPAIGNS.map((campaign) => {
+                const isSaved = savedCampaigns.includes(campaign.id);
+                const hasInterest = interestedCampaigns.includes(campaign.id);
+                return (
+                  <article className="creator-campaign-post" key={campaign.id}>
+                    <div className="creator-post-source">
+                      <span className="creator-source-mark">{campaign.publisher.slice(0, 1)}</span>
+                      <span><strong>{campaign.publisher}</strong><small>{campaign.publisherType} · {campaign.posted}</small></span>
+                      <button
+                        type="button"
+                        aria-label={`${isSaved ? 'Remove saved' : 'Save'} ${campaign.title}`}
+                        aria-pressed={isSaved}
+                        className={`creator-save-button${isSaved ? ' is-saved' : ''}`}
+                        onClick={() => toggleItem(savedCampaigns, campaign.id, setSavedCampaigns)}
+                      >
+                        <Bookmark size={16} />
+                      </button>
+                    </div>
+                    <h3>{campaign.title}</h3>
+                    <p className="creator-campaign-description">{campaign.description}</p>
+                    <div className="creator-campaign-details">
+                      <strong>{campaign.budget}</strong>
+                      <span>Apply by {campaign.deadline}</span>
+                    </div>
+                    <div className="creator-opportunity-tags">
+                      {[...campaign.niches, ...campaign.platforms].map((tag) => <span key={tag}>{tag}</span>)}
+                    </div>
+                    <div className="creator-campaign-actions">
+                      <button
+                        type="button"
+                        className={`creator-interest-button${hasInterest ? ' is-interested' : ''}`}
+                        aria-pressed={hasInterest}
+                        onClick={() => toggleItem(interestedCampaigns, campaign.id, setInterestedCampaigns)}
+                      >
+                        {hasInterest ? 'Interest noted' : 'I’m interested'}
+                        {!hasInterest && <ArrowRight size={14} />}
+                      </button>
+                      <span>Demo action · no application is sent</span>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {showEvents && (
+          <section className="creator-feed-section creator-events-section" aria-labelledby="creator-events-title">
+            <div className="creator-feed-section-heading">
+              <div>
+                <h2 id="creator-events-title">Upcoming events</h2>
+                <p>Meetups and activations posted by partners.</p>
+              </div>
+              <CalendarDays size={18} aria-hidden="true" />
+            </div>
+            <div className="creator-event-list">
+              {CREATOR_FEED_EVENTS.map((event) => {
+                const isAdded = addedEvents.includes(event.id);
+                return (
+                  <article className="creator-event-post" key={event.id}>
+                    <span className="creator-event-date">{event.date.split(',')[0]}</span>
+                    <div className="creator-event-copy">
+                      <span className="creator-event-category">{event.category}</span>
+                      <h3>{event.title}</h3>
+                      <p>{event.description}</p>
+                      <span className="creator-event-publisher">{event.publisher}</span>
+                      <span className="creator-event-location"><MapPin size={14} />{event.location}</span>
+                      <span className="creator-event-time">{event.time}</span>
+                      <button
+                        type="button"
+                        className="creator-event-action"
+                        aria-pressed={isAdded}
+                        onClick={() => toggleItem(addedEvents, event.id, setAddedEvents)}
+                      >
+                        <CalendarPlus size={14} />
+                        {isAdded ? 'Added to your list' : 'Save event'}
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
+      </div>
+      <p className="creator-feed-disclaimer">Campaigns and events above are sample listings for the demo. Saving or expressing interest does not contact the publisher.</p>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const { currentUser, setCurrentPersona } = useAuth();
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
@@ -410,6 +622,7 @@ export default function DashboardPage() {
   const selectedTabTitle = activeSection === 'overview'
     ? config.tabs[activeTab]
     : selectedNavigation?.label ?? config.tabs[activeTab];
+  const isCreatorOpportunities = currentUser.personaKey === 'CREATOR' && activeSection === 'creators';
   const visibleNavigation = (
     <nav className="workspace-nav" aria-label="Workspace navigation">
       <span className="workspace-nav-label">Workspace</span>
@@ -490,9 +703,11 @@ export default function DashboardPage() {
           <div className="workspace-heading">
             <div>
               <h1>{activeSection === 'overview' ? config.title : selectedTabTitle}</h1>
-              <p>{config.description}</p>
+              <p>{isCreatorOpportunities ? 'Find paid campaigns and creator events shared by brands and agencies.' : config.description}</p>
             </div>
-            <Link className="workspace-primary-action" href={activeSection === 'overview' ? config.actionHref : selectedNavigation?.href ?? config.actionHref}>{activeSection === 'overview' ? config.action : `Open ${selectedNavigation?.label.toLowerCase() ?? 'workspace'}`}<ArrowRight size={15} /></Link>
+            {!isCreatorOpportunities && (
+              <Link className="workspace-primary-action" href={activeSection === 'overview' ? config.actionHref : selectedNavigation?.href ?? config.actionHref}>{activeSection === 'overview' ? config.action : `Open ${selectedNavigation?.label.toLowerCase() ?? 'workspace'}`}<ArrowRight size={15} /></Link>
+            )}
           </div>
 
           {activeSection === 'overview' && <div className="workspace-tabs" role="tablist" aria-label={`${config.label} dashboard views`}>
@@ -512,9 +727,12 @@ export default function DashboardPage() {
             ))}
           </div>}
 
-          <MetricStrip metrics={config.metrics} />
-
-          <div className="workspace-content-grid">
+          {isCreatorOpportunities ? (
+            <CreatorOpportunityFeed />
+          ) : (
+            <>
+              <MetricStrip metrics={config.metrics} />
+              <div className="workspace-content-grid">
             <section
               className="workspace-focus"
               id="dashboard-view-panel"
@@ -621,8 +839,10 @@ export default function DashboardPage() {
                 <span><strong>Role-aware workspace</strong><small>Views and deal access follow the selected demo account.</small></span>
               </div>
             </aside>
-          </div>
-          <p className="workspace-demo-note">Demo workspace · sample campaign and contract data from the project seed records.</p>
+              </div>
+              <p className="workspace-demo-note">Demo workspace · sample campaign and contract data from the project seed records.</p>
+            </>
+          )}
         </main>
       </div>
     </div>
