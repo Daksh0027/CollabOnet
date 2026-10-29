@@ -1,379 +1,340 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext';
-import { 
-  Sparkles, 
-  Lock, 
-  ShieldCheck, 
-  FileSignature, 
-  Building2, 
-  Calendar, 
-  Users2, 
-  AlertTriangle, 
-  Search, 
-  ArrowRight, 
-  CheckCircle2, 
-  TrendingUp,
-  Shield,
-  ArrowUpRight,
-  Flame,
+import { useEffect, useState, type KeyboardEvent } from 'react';
+import {
+  ArrowDownRight,
+  ArrowRight,
   Check,
-  Scale
+  CircleCheck,
+  FileCheck2,
+  LockKeyhole,
+  MessageSquareText,
+  ShieldCheck,
 } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
-import { SEED_BRANCHES, SEED_ORGANIZATION, SEED_COMPETITOR_RADAR, SEED_CREATORS } from '@/lib/store';
-import { formatCurrency } from '@/lib/utils';
+import { PRESET_PERSONAS } from '@/context/AuthContext';
+
+const audiences = [
+  {
+    id: 'creator',
+    label: 'Creators',
+    persona: 'CREATOR',
+    title: 'Keep the work yours.',
+    body: 'Find partnerships that fit, agree on the details in one place, and see exactly what is due next.',
+    points: ['A clear brief before you commit', 'Milestones tied to the agreement', 'A private room for every deal'],
+    action: 'Open creator workspace',
+  },
+  {
+    id: 'brand',
+    label: 'Brand teams',
+    persona: 'SALES_REP_A',
+    title: 'Build campaigns with confidence.',
+    body: 'Find verified talent, keep conversations attached to the brief, and move agreed terms into a trackable contract.',
+    points: ['Search by audience, niche, and fit', 'Keep ownership clear across the team', 'Track approvals and escrow in one view'],
+    action: 'Open brand workspace',
+  },
+  {
+    id: 'manager',
+    label: 'Talent managers',
+    persona: 'TALENT_MANAGER',
+    title: 'Guide every deal without losing the thread.',
+    body: 'Support your roster with a shared view of the terms, timing, and next milestone—while company contact details stay protected.',
+    points: ['See deal status across your talent', 'Review extracted terms and deadlines', 'Keep sensitive brand details masked'],
+    action: 'Open manager workspace',
+  },
+  {
+    id: 'leadership',
+    label: 'Company leaders',
+    persona: 'COMPANY_HEAD',
+    title: 'Keep a clear view across teams.',
+    body: 'Bring budgets, branch activity, and collaboration risk into one view without taking over each deal room.',
+    points: ['Compare regional allocations', 'Follow spend against the pooled budget', 'Spot conflicts before approval'],
+    action: 'Open leadership workspace',
+  },
+] as const;
+
+type AudienceId = (typeof audiences)[number]['id'];
 
 export default function HomePage() {
-  const { currentUser } = useAuth();
+  const [activeAudience, setActiveAudience] = useState<AudienceId>('creator');
+  const audience = audiences.find((item) => item.id === activeAudience) ?? audiences[0];
+  const persona = PRESET_PERSONAS[audience.persona];
+
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return;
+
+    const targets = document.querySelectorAll<HTMLElement>('[data-page-reveal]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-revealed');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+    targets.forEach((target, index) => {
+      target.style.setProperty('--reveal-delay', `${(index % 4) * 70}ms`);
+      observer.observe(target);
+    });
+    document.documentElement.classList.add('has-page-motion');
+
+    return () => {
+      observer.disconnect();
+      document.documentElement.classList.remove('has-page-motion');
+    };
+  }, []);
+
+  function handleAudienceKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    let nextIndex = index;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index + audiences.length - 1) % audiences.length;
+    else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') nextIndex = (index + 1) % audiences.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = audiences.length - 1;
+    else return;
+
+    event.preventDefault();
+    const nextAudience = audiences[nextIndex];
+    setActiveAudience(nextAudience.id);
+    document.getElementById(`audience-tab-${nextAudience.id}`)?.focus();
+  }
 
   return (
-    <div className="space-y-10">
-      {/* Editorial Minimalist Hero Header */}
-      <section className="relative overflow-hidden rounded-3xl bg-neutral-950 text-white p-8 sm:p-12 border border-neutral-800 shadow-xl">
-        <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-white text-[11px] font-semibold tracking-wider uppercase border border-white/15">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#0057FF] animate-pulse" />
-            Verified Escrow Protocol v1.0
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] text-white">
-            The Trust Layer for Creator Sponsorships.
+    <div className="marketing-page">
+      <section className="marketing-hero" aria-labelledby="landing-title">
+        <div className="marketing-hero-inner">
+          <h1 id="landing-title" className="marketing-headline" data-page-reveal>
+            Make every collab
+            <span className="headline-deal" data-ui data-page-reveal aria-label="A verified deal with funded milestones">
+              <span className="headline-deal-mark"><Check size={14} strokeWidth={2.5} /></span>
+              <span><strong>Deal room</strong><small>Protected · In progress</small></span>
+            </span>
+            count.
           </h1>
-
-          <p className="text-sm sm:text-base text-neutral-400 font-normal leading-relaxed max-w-2xl">
-            Direct brand-to-creator deals with 2-phase cryptographic KYC, dual-access agency privacy, and SHA-256 milestone escrow contracts. No scam mediators.
+          <p className="marketing-intro" data-page-reveal>
+            A shared workspace for creators and brands to find the right fit, agree on clear terms,
+            and move every milestone forward.
           </p>
-
-          <div className="flex flex-wrap items-center gap-3 pt-3">
-            <Link href="/feed">
-              <Button size="lg" className="rounded-full bg-white text-neutral-950 hover:bg-neutral-100 font-semibold text-xs gap-2 px-6">
-                Explore Creator Index
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </Link>
-            <Link href="/deals">
-              <Button size="lg" variant="outline" className="rounded-full border-neutral-700 bg-neutral-900 text-white hover:bg-neutral-800 text-xs px-6">
-                Active Escrow Deals
-              </Button>
-            </Link>
-            <Link href="/onboarding/verify">
-              <Button size="lg" variant="ghost" className="rounded-full text-neutral-400 hover:text-white text-xs gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-emerald-400" />
-                Run KYC Check
-              </Button>
-            </Link>
+          <div className="marketing-hero-actions" data-page-reveal>
+            <a className="marketing-button marketing-button-primary" href="#workspaces">
+              Choose your workspace <ArrowRight size={16} />
+            </a>
+            <a className="marketing-text-link" href="#how-it-works">
+              See how it works <ArrowDownRight size={15} />
+            </a>
           </div>
+          <p className="marketing-note" data-page-reveal>
+            For creators, talent managers, and the teams building campaigns with them.
+          </p>
         </div>
-
-        {/* Minimal Subtle Geometric Grid Overlay */}
-        <div className="absolute right-0 bottom-0 top-0 w-1/3 opacity-15 pointer-events-none hidden lg:block bg-[radial-gradient(#0057FF_1px,transparent_1px)] [background-size:16px_16px]" />
-      </section>
-
-      {/* Live Protocol Metric Matrix */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs">
-          <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Escrow Pool Available</div>
-          <div className="text-2xl font-extrabold text-neutral-950 tabular-nums mt-1">
-            {formatCurrency(SEED_ORGANIZATION.billingPoolBalance)}
-          </div>
-          <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-1 mt-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            100% Funds Secured
-          </span>
-        </div>
-
-        <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs">
-          <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Verified Creators</div>
-          <div className="text-2xl font-extrabold text-neutral-950 tabular-nums mt-1">
-            1,420
-          </div>
-          <span className="text-[11px] text-neutral-500 font-medium flex items-center gap-1 mt-1">
-            2-Phase Video KYC Verified
-          </span>
-        </div>
-
-        <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs">
-          <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Avg Brand Safety</div>
-          <div className="text-2xl font-extrabold text-neutral-950 tabular-nums mt-1">
-            97.8%
-          </div>
-          <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-1 mt-1">
-            AI Automated Screening
-          </span>
-        </div>
-
-        <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs">
-          <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Mediator Fee Skim</div>
-          <div className="text-2xl font-extrabold text-[#0057FF] tabular-nums mt-1">
-            0.0%
-          </div>
-          <span className="text-[11px] text-neutral-500 font-medium flex items-center gap-1 mt-1">
-            Zero Hidden Kickbacks
-          </span>
+        <div className="marketing-hero-edge" aria-hidden="true" data-page-reveal>
+          <span>Discover</span><span>Agree</span><span>Deliver</span>
         </div>
       </section>
 
-      {/* Behance-Style Featured Creator Spotlight */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
+      <section className="audience-section" id="workspaces" aria-labelledby="audience-title">
+        <div className="section-lead" data-page-reveal>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-neutral-950">
-              Curated Talent Spotlight
-            </h2>
-            <p className="text-xs text-neutral-500 mt-0.5">
-              Verified creator portfolios available for immediate milestone escrow booking.
-            </p>
+            <h2 id="audience-title">One platform, shaped around your role.</h2>
+            <p>Start in the workspace that matches how you collaborate.</p>
           </div>
-          <Link
-            href="/feed"
-            className="text-xs font-semibold text-[#0057FF] hover:underline flex items-center gap-1"
+          <span className="section-aside">Choose a workspace</span>
+        </div>
+
+        <div className="audience-layout">
+          <div className="audience-tabs" role="tablist" aria-label="Choose your workspace" data-page-reveal>
+            {audiences.map((item, index) => (
+              <button
+                key={item.id}
+                id={`audience-tab-${item.id}`}
+                type="button"
+                role="tab"
+                aria-selected={activeAudience === item.id}
+                aria-controls="audience-panel"
+                tabIndex={activeAudience === item.id ? 0 : -1}
+                className={`audience-tab${activeAudience === item.id ? ' is-active' : ''}`}
+                onClick={() => setActiveAudience(item.id)}
+                onKeyDown={(event) => handleAudienceKeyDown(event, index)}
+              >
+                <span>{item.label}</span>
+                <ArrowRight size={16} />
+              </button>
+            ))}
+          </div>
+
+          <div
+            className="audience-panel"
+            id="audience-panel"
+            role="tabpanel"
+            aria-labelledby={`audience-tab-${audience.id}`}
+            data-page-reveal
           >
-            <span>View Full Roster ({SEED_CREATORS.length})</span>
-            <ArrowRight className="h-3.5 w-3.5" />
+            <div className="audience-copy">
+              <h3>{audience.title}</h3>
+              <p>{audience.body}</p>
+              <ul>
+                {audience.points.map((point) => (
+                  <li key={point}><CircleCheck size={17} />{point}</li>
+                ))}
+              </ul>
+              <Link className="marketing-button marketing-button-dark" href={`/dashboard?persona=${audience.persona}`}>
+                {audience.action}<ArrowRight size={16} />
+              </Link>
+              <span className="demo-caption">Demo workspace · {persona.role.replace(/_/g, ' ').toLowerCase()}</span>
+            </div>
+            <div className={`audience-art audience-art-${audience.id}`} data-ui>
+              {activeAudience === 'creator' && (
+                <div className="creator-preview">
+                  <div className="preview-toolbar"><span>Creator workspace</span><span>Oct 29</span></div>
+                  <div className="creator-preview-title">Your next deliverable</div>
+                  <div className="creator-preview-project">
+                    <span className="preview-project-mark">AM</span>
+                    <span><strong>Air Max Pulse launch</strong><small>Video draft · due Nov 12</small></span>
+                    <span className="preview-status">In review</span>
+                  </div>
+                  <div className="creator-preview-progress"><span /></div>
+                  <div className="creator-preview-foot"><span>Contract total</span><strong>$2,500.00</strong></div>
+                </div>
+              )}
+              {activeAudience === 'brand' && (
+                <div className="brand-preview">
+                  <div className="preview-toolbar"><span>Talent search</span><span>Filters · 3</span></div>
+                  <div className="brand-search-row"><span>Fintech creators with strong engagement</span><span>⌕</span></div>
+                  <div className="brand-talent-row"><span className="talent-avatar">RT</span><span><strong>Rohan Tech Studio</strong><small>Fintech · Bengaluru</small></span><b>96.5%</b></div>
+                  <div className="brand-talent-row"><span className="talent-avatar talent-avatar-2">AC</span><span><strong>Ananya Capital</strong><small>Finance · Mumbai</small></span><b>98.0%</b></div>
+                </div>
+              )}
+              {activeAudience === 'manager' && (
+                <div className="manager-preview">
+                  <div className="preview-toolbar"><span>Roster activity</span><span>1 creator</span></div>
+                  <div className="manager-deal-row"><span className="manager-avatar">RS</span><span><strong>Rohan Tech Studio</strong><small>Draft review due Nov 12</small></span><span className="manager-private"><LockKeyhole size={13} /> Brand details protected</span></div>
+                  <div className="manager-privacy"><LockKeyhole size={14} /><span>Company contact details stay hidden in your view.</span></div>
+                </div>
+              )}
+              {activeAudience === 'leadership' && (
+                <div className="leadership-preview">
+                  <div className="preview-toolbar"><span>Regional overview</span><span>October</span></div>
+                  <div className="leadership-total"><span>Pooled budget</span><strong>$250,000</strong></div>
+                  <div className="region-row"><span>North America</span><span className="region-track"><i style={{ width: '65%' }} /></span><b>$64,500</b></div>
+                  <div className="region-row"><span>APAC</span><span className="region-track"><i style={{ width: '60%' }} /></span><b>$48,200</b></div>
+                  <div className="region-row"><span>EMEA</span><span className="region-track"><i style={{ width: '46%' }} /></span><b>$32,000</b></div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="product-section" aria-labelledby="product-title">
+        <div className="section-lead product-section-lead" data-page-reveal>
+          <div>
+            <h2 id="product-title">The whole deal, not just the chat.</h2>
+            <p>Keep the conversation, agreement, and next action together.</p>
+          </div>
+          <Link className="marketing-text-link" href="/dashboard?persona=SALES_REP_A">
+            Explore the workspace <ArrowRight size={15} />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {SEED_CREATORS.slice(0, 3).map((creator) => (
-            <div
-              key={creator.id}
-              className="group bg-white rounded-3xl border border-neutral-200/80 overflow-hidden shadow-xs hover:shadow-lg hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-neutral-100">
-                  <img
-                    src={creator.coverImageUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'}
-                    alt={creator.displayName}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-semibold uppercase border border-white/10">
-                      {creator.primaryNiche}
-                    </span>
-                  </div>
-                  <div className="absolute top-3 right-3">
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-bold">
-                      {creator.aiBrandSafetyScore}% Safety
-                    </span>
-                  </div>
-                </div>
+        <div className="deal-room-preview" data-ui data-page-reveal>
+          <aside className="deal-room-sidebar">
+            <div className="preview-brand"><span className="preview-brand-mark">C</span>CollabOnet</div>
+            <div className="preview-workspace">North America <span>⌄</span></div>
+            <span className="preview-nav-label">Workspace</span>
+            <span className="preview-nav-item"><span>◷</span>Activity</span>
+            <span className="preview-nav-item"><span>⌕</span>Creator index</span>
+            <span className="preview-nav-item preview-nav-current"><span>▤</span>Deal rooms</span>
+            <span className="preview-nav-item"><span>□</span>Contracts</span>
+            <div className="preview-side-bottom"><span className="side-avatar">AZ</span><span><strong>Alice Zhang</strong><small>Brand team</small></span></div>
+          </aside>
 
-                <div className="p-5 pt-3">
-                  <div className="flex items-start gap-3 -mt-8 relative z-10 mb-2">
-                    <div className="h-12 w-12 rounded-2xl overflow-hidden border-2 border-white shadow-md bg-neutral-100 shrink-0">
-                      <img
-                        src={creator.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'}
-                        alt={creator.displayName}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <h3 className="font-bold text-sm text-neutral-950 group-hover:text-[#0057FF] transition-colors">
-                      {creator.displayName}
-                    </h3>
-                    <CheckCircle2 className="h-3.5 w-3.5 text-[#0057FF]" />
-                  </div>
-                  <div className="text-[11px] text-neutral-400 font-mono">{creator.handle}</div>
-
-                  <p className="text-xs text-neutral-600 line-clamp-2 mt-2 leading-relaxed">
-                    {creator.bio}
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-2 mt-4 p-2.5 rounded-xl bg-neutral-50 text-center text-xs">
-                    <div>
-                      <div className="text-[9px] uppercase font-bold text-neutral-400">Reach</div>
-                      <div className="font-extrabold text-neutral-950 tabular-nums">
-                        {creator.statsCache.subscribers.toLocaleString()}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[9px] uppercase font-bold text-neutral-400">Rate (60s)</div>
-                      <div className="font-extrabold text-[#0057FF] tabular-nums">
-                        {creator.rates.yt_integrated_60s ? formatCurrency(creator.rates.yt_integrated_60s) : 'Custom'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-5 pt-0">
-                <Link href="/feed" className="block w-full">
-                  <Button variant="outline" size="sm" className="w-full rounded-full text-xs h-8">
-                    View Showcase
-                  </Button>
-                </Link>
-              </div>
+          <div className="deal-room-main" data-ui>
+            <div className="deal-room-topline">
+              <span>Deal rooms&nbsp; / &nbsp;Air Max Pulse launch</span>
+              <span className="deal-state"><i />Contract signed</span>
             </div>
-          ))}
+            <div className="deal-room-heading">
+              <div><h3>Air Max Pulse launch</h3><p>Rohan Tech Studio · 3 agreed deliverables</p></div>
+              <span className="deal-total">$2,500.00 <small>USD</small></span>
+            </div>
+            <div className="deal-room-tabs"><span className="tab-current">Activity</span><span>Agreement</span><span>Milestones</span></div>
+            <div className="deal-timeline">
+              <div className="timeline-entry"><span className="timeline-mark is-done"><Check size={12} /></span><div><strong>Agreement signed by both sides</strong><small>Today · 3:15 PM</small></div></div>
+              <div className="timeline-entry"><span className="timeline-mark is-live"><FileCheck2 size={12} /></span><div><strong>Video draft submitted for review</strong><small>Due Nov 12 · Review window 48 hours</small></div><span className="timeline-state">In review</span></div>
+              <div className="timeline-entry"><span className="timeline-mark" /><div><strong>YouTube integration goes live</strong><small>Due Nov 18 · $2,000 milestone</small></div></div>
+              <div className="timeline-entry"><span className="timeline-mark" /><div><strong>Instagram story set</strong><small>Due Nov 20 · $500 milestone</small></div></div>
+            </div>
+            <div className="deal-room-message"><MessageSquareText size={15} /><span><strong>Rohan Tech Studio</strong><small>“Sounds fair. Please generate the contract and lock escrow so we can kick off.”</small></span><span className="message-time">2m ago</span></div>
+          </div>
+
+          <aside className="deal-room-insight">
+            <div className="insight-title"><span><ShieldCheck size={15} /> Deal summary</span><span>•••</span></div>
+            <p>Terms agreed</p>
+            <ul>
+              <li><Check size={13} />$2,500 total compensation</li>
+              <li><Check size={13} />1 YouTube integration</li>
+              <li><Check size={13} />2 supporting stories</li>
+            </ul>
+            <div className="escrow-summary"><span>Escrow status</span><strong>Funds protected</strong><small>Released as milestones are approved</small></div>
+            <Link href="/deals" className="insight-link">View agreement <ArrowRight size={14} /></Link>
+          </aside>
+        </div>
+        <p className="preview-footnote">Interface preview uses CollabOnet demo data.</p>
+      </section>
+
+      <section className="workflow-section" id="how-it-works" aria-labelledby="workflow-title">
+        <div className="workflow-intro">
+          <h2 id="workflow-title">From first brief to final milestone.</h2>
+          <p>Every step stays attached to the collaboration, so both sides know what happens next.</p>
+        </div>
+        <ol className="workflow-steps">
+          <li className="workflow-step" data-page-reveal>
+            <h3>Find the right fit</h3>
+            <p>Search creator profiles by niche, audience, platform, and collaboration needs.</p>
+            <div className="workflow-mini-search" data-ui><span>Search creator index</span><span>Fintech · India · YouTube</span></div>
+          </li>
+          <li className="workflow-step" data-page-reveal>
+            <h3>Agree in one room</h3>
+            <p>Keep messages, extracted terms, and the signed agreement connected to the deal.</p>
+            <div className="workflow-mini-contract" data-ui><FileCheck2 size={16} /><span><strong>Agreement signed</strong><small>Both parties · SHA-256 fingerprint</small></span><Check size={15} /></div>
+          </li>
+          <li className="workflow-step" data-page-reveal>
+            <h3>Move by milestone</h3>
+            <p>Track proof, reviews, and escrow releases against the dates both sides agreed to.</p>
+            <div className="workflow-mini-milestone" data-ui><span className="mini-milestone-dot" /><span><strong>Draft review</strong><small>Due Nov 12</small></span><b>In review</b></div>
+          </li>
+        </ol>
+      </section>
+
+      <section className="trust-section" id="trust">
+        <div className="trust-copy" data-page-reveal>
+          <span className="trust-mark"><ShieldCheck size={22} /></span>
+          <h2>Trust should be part of the workflow.</h2>
+          <p>Verification, access controls, signed terms, and milestone records are built into how a collaboration moves.</p>
+        </div>
+        <div className="trust-list" data-ui data-page-reveal>
+          <div><ShieldCheck size={18} /><span><strong>Verified identities</strong><small>Two-phase checks for creator accounts.</small></span><Check size={16} /></div>
+          <div><LockKeyhole size={18} /><span><strong>Role-aware privacy</strong><small>People see the details their role allows.</small></span><Check size={16} /></div>
+          <div><FileCheck2 size={18} /><span><strong>Traceable agreements</strong><small>Terms and milestone events stay linked.</small></span><Check size={16} /></div>
         </div>
       </section>
 
-      {/* Main Grid: Core Security Moats & Live Governance Radar */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left Column: Security Architecture Highlights */}
-        <div className="lg:col-span-8 space-y-6">
-          <div className="border-b border-neutral-200/80 pb-3">
-            <h2 className="text-xl font-bold tracking-tight text-neutral-950">
-              Protocol Architecture
-            </h2>
-            <p className="text-xs text-neutral-500 mt-0.5">
-              Engineered to replace vulnerable informal chats with cryptographically enforceable workflows.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Moat 1: 2-Phase Verification */}
-            <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs space-y-3 flex flex-col justify-between">
-              <div className="space-y-2">
-                <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                  <ShieldCheck className="h-5 w-5" />
-                </div>
-                <h3 className="font-bold text-sm text-neutral-950">2-Phase KYC Moat</h3>
-                <p className="text-xs text-neutral-500 leading-relaxed">
-                  Liveness video check with randomized nonces verified via Whisper ASR + admin 1-on-1 human confirmation.
-                </p>
-              </div>
-              <Link href="/onboarding/verify">
-                <Button variant="outline" size="sm" className="w-full rounded-full text-xs h-8">
-                  Launch KYC
-                </Button>
-              </Link>
-            </div>
-
-            {/* Moat 2: Dual Access RLS */}
-            <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs space-y-3 flex flex-col justify-between">
-              <div className="space-y-2">
-                <div className="h-10 w-10 rounded-2xl bg-[#0057FF]/10 text-[#0057FF] flex items-center justify-center font-bold">
-                  <Lock className="h-5 w-5" />
-                </div>
-                <h3 className="font-bold text-sm text-neutral-950">Dual-Access Isolation</h3>
-                <p className="text-xs text-neutral-500 leading-relaxed">
-                  Row-level security shields creators while restricting agencies to high-level deal approvals without channel hijack.
-                </p>
-              </div>
-              <Link href="/messages">
-                <Button variant="outline" size="sm" className="w-full rounded-full text-xs h-8">
-                  Deal Rooms
-                </Button>
-              </Link>
-            </div>
-
-            {/* Moat 3: Instant Contract Extraction */}
-            <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs space-y-3 flex flex-col justify-between">
-              <div className="space-y-2">
-                <div className="h-10 w-10 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
-                  <FileSignature className="h-5 w-5" />
-                </div>
-                <h3 className="font-bold text-sm text-neutral-950">Chat-to-Contract</h3>
-                <p className="text-xs text-neutral-500 leading-relaxed">
-                  AI extracts key terms directly into legally binding agreements with SHA-256 document fingerprinting.
-                </p>
-              </div>
-              <Link href="/deals">
-                <Button variant="outline" size="sm" className="w-full rounded-full text-xs h-8">
-                  View Contracts
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          {/* Active User Context Banner */}
-          <div className="rounded-2xl border border-neutral-200/80 bg-white p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-2xl bg-neutral-950 text-white font-bold flex items-center justify-center text-sm shrink-0">
-                {currentUser.avatarFallback}
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-sm text-neutral-950">{currentUser.name}</span>
-                  <Badge variant="accent" className="text-[10px]">{currentUser.personaKey}</Badge>
-                </div>
-                <div className="text-xs text-neutral-500 mt-0.5">{currentUser.description}</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Link href="/messages">
-                <Button size="sm" className="rounded-full bg-neutral-950 text-white text-xs h-8">
-                  Open Chats
-                </Button>
-              </Link>
-              <Link href="/enterprise/dashboard">
-                <Button size="sm" variant="outline" className="rounded-full text-xs h-8">
-                  Enterprise
-                </Button>
-              </Link>
-            </div>
-          </div>
+      <section className="closing-section">
+        <div data-page-reveal>
+          <h2>Make the next collaboration easier to trust.</h2>
+          <p>Choose the workspace that fits your role and see how a deal moves from first message to delivery.</p>
         </div>
-
-        {/* Right Column: Radar, Budget & Hall of Shame */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="border-b border-neutral-200/80 pb-3">
-            <h2 className="text-xl font-bold tracking-tight text-neutral-950">
-              Live Radar
-            </h2>
-            <p className="text-xs text-neutral-500 mt-0.5">
-              Automated exclusivity alerts and public accountability.
-            </p>
-          </div>
-
-          {/* Competitor Radar Card */}
-          <div className="bg-white rounded-2xl p-5 border border-neutral-200/80 shadow-xs space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-xs text-neutral-900 flex items-center gap-1.5">
-                <AlertTriangle className="h-4 w-4 text-amber-600" />
-                Collision &amp; Exclusivity
-              </h3>
-              <span className="text-[10px] text-neutral-400 font-medium">Real-time</span>
-            </div>
-
-            <div className="space-y-2.5">
-              {SEED_COMPETITOR_RADAR.slice(0, 2).map((item) => {
-                const creator = SEED_CREATORS.find((c) => c.id === item.creatorId);
-                return (
-                  <div key={item.id} className="p-3 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs space-y-1">
-                    <div className="flex items-center justify-between font-semibold text-neutral-900">
-                      <span>{creator ? creator.displayName : 'Verified Creator'}</span>
-                      <span className="text-[10px] text-rose-600 font-bold uppercase">{item.competitorBrandName}</span>
-                    </div>
-                    <div className="text-[11px] text-neutral-500">
-                      Detected via {item.detectedVia}. Exclusivity: <strong className="text-neutral-900">{item.exclusivityDaysRemaining || 0} days</strong> remaining.
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Hall of Shame Spotlight */}
-          <div className="bg-white rounded-2xl p-5 border border-rose-200 shadow-xs space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-xs text-rose-600 flex items-center gap-1.5">
-                <Scale className="h-4 w-4 text-rose-600" />
-                The Hall of Shame
-              </h3>
-              <Badge variant="destructive" className="text-[9px]">Adjudicated</Badge>
-            </div>
-
-            <p className="text-xs text-neutral-600 leading-relaxed">
-              Public fraud ledger documenting mediator fee-skims, non-payments, and breaches after expired 72-hour grace periods.
-            </p>
-
-            <Link href="/hall-of-shame" className="block">
-              <Button size="sm" variant="outline" className="w-full rounded-full border-rose-200 text-rose-700 hover:bg-rose-50 text-xs h-8">
-                Inspect Public Blacklist
-              </Button>
-            </Link>
-          </div>
-        </div>
+        <Link className="marketing-button marketing-button-primary" href={`/dashboard?persona=${audience.persona}`} data-page-reveal>
+          Open {audience.label.toLowerCase()} workspace <ArrowRight size={16} />
+        </Link>
       </section>
+
+      <footer className="marketing-footer">
+        <div className="marketing-footer-inner">
+          <Link href="/">CollabOnet</Link>
+          <span>Creator partnerships, with the work and terms in view.</span>
+          <Link href="/hall-of-shame">Trust &amp; accountability</Link>
+        </div>
+      </footer>
     </div>
   );
 }

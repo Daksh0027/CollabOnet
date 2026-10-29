@@ -17,7 +17,8 @@ import {
   Check, 
   Search,
   Compass,
-  Layers
+  Layers,
+  LayoutDashboard,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -29,6 +30,7 @@ export function AppHeader() {
   const [searchVal, setSearchVal] = useState('');
 
   const navLinks = [
+    { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
     { href: '/feed', label: 'Explore', icon: Compass },
     { href: '/deals', label: 'Deals & Escrow', icon: FileText },
     { href: '/messages', label: 'Messages', icon: MessageSquare, hasUnread: true },

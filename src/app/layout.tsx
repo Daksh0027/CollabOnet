@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './collab-ui.css';
 import { AuthProvider } from '@/context/AuthContext';
-import { AppHeader } from '@/components/layout/AppHeader';
+import { SiteFrame } from '@/components/layout/SiteFrame';
 
 export const metadata: Metadata = {
-  title: 'CollabOnet — Curated Creator Marketplace & Escrow Ledger',
+  title: 'CollabOnet — Creator partnerships, in one place',
   description:
-    'Minimal, direct collaboration platform for creators, managers, and brand sponsors. Zero-scam 2-phase KYC, escrow-backed deals, and dual-access messaging.',
+    'A shared workspace for creators, talent managers, and brands to discover partners, agree on terms, and manage escrow-backed milestones.',
 };
 
 export default function RootLayout({
@@ -26,31 +27,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[#f9f9fb] text-[#09090b] min-h-screen flex flex-col font-sans">
         <AuthProvider>
-          <AppHeader />
-          <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {children}
-          </main>
-          <footer className="border-t border-neutral-200/80 bg-white/60 backdrop-blur-sm py-8 text-xs text-neutral-500 mt-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-6">
-                <span className="font-bold text-neutral-900 tracking-tight flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-[#0057FF]" />
-                  CollabOnet
-                </span>
-                <span className="hover:text-neutral-900 transition-colors cursor-pointer">Protocol</span>
-                <span className="hover:text-neutral-900 transition-colors cursor-pointer">Escrow Specs</span>
-                <span className="hover:text-neutral-900 transition-colors cursor-pointer">Hall of Shame</span>
-                <span className="hover:text-neutral-900 transition-colors cursor-pointer">Privacy &amp; Terms</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60 font-medium">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  SHA-256 Escrow Engine Active
-                </span>
-                <span className="text-neutral-400">© 2026 CollabOnet</span>
-              </div>
-            </div>
-          </footer>
+          <SiteFrame>{children}</SiteFrame>
         </AuthProvider>
       </body>
     </html>

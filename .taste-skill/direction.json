@@ -1,170 +1,436 @@
 {
  "version": 1,
- "kind": "app",
- "at": "2026-10-29T15:38:21.037Z",
- "seed": 622790965,
+ "at": "2026-10-29T16:43:38.573Z",
+ "seed": 23373414,
+ "redraws": 0,
  "input": {
-  "kind": "creator",
-  "brief": "CollaboNet creator agency and enterprise transaction platform",
-  "theme": null,
-  "screens": [
-   "overview",
-   "analytics",
-   "list"
+  "brief": "CollabOnet connects verified creators, talent managers, and brand teams in one accountable collaboration workspace: talent discovery, private deal rooms, e-signatures, and escrow milestones.",
+  "sector": "saas",
+  "tone": null,
+  "have": [],
+  "keep": [
+   "palette",
+   "type"
   ],
-  "keep": [],
-  "style": "accent-ladder"
+  "avoid": [],
+  "sections": [
+   "showcase",
+   "features",
+   "how-it-works",
+   "proof",
+   "cta"
+  ],
+  "direction": "sentence-as-layout"
  },
- "style": {
-  "id": "accent-ladder",
-  "name": "Accent ladder",
-  "theme": "light",
-  "basis": "3 screens: a newsletter home, a network analytics overview, a cap-table company home",
-  "suits": [
-   "creator",
-   "smb-admin",
-   "community",
-   "analytics"
+ "imagery": "interface",
+ "allow": [],
+ "direction": {
+  "id": "sentence-as-layout",
+  "name": "The sentence is the layout",
+  "sectors": [
+   "agency",
+   "saas",
+   "ai-product",
+   "dev-tool",
+   "nonprofit",
+   "culture",
+   "education",
+   "physical-product",
+   "consumer-app",
+   "finance",
+   "health",
+   "event",
+   "other"
   ],
-  "idea": "One brand hue at full strength only on small marks, and its pale tints doing all the area work: the active nav row, a plan card, badges and progress tracks.",
-  "colourBudget": "3-10%, nearly all of it as pale tints of the one hue",
-  "tokens": {
-   "ground": "#f9fafb",
-   "surface": "#ffffff",
-   "raised": "#f3f4f6",
-   "border": "#e5e7eb",
-   "rule": "#f2f2f2",
-   "control": "#d1d5db",
-   "text": "#111827",
-   "muted": "#5f6672",
-   "accent": "#b8336a",
-   "accentSoft": "#fdf2f7",
-   "accentTrack": "#f8dbe8",
-   "accentInk": "#6b1d3e",
-   "positive": "#247b50",
-   "negative": "#c4242a",
-   "warning": "#92400e",
-   "chart": [
-    "#b8336a",
-    "#6b7280",
-    "#d4618f"
-   ],
-   "pills": {
-    "positive": [
-     "#dcfce7",
-     "#14532d"
-    ],
-    "negative": [
-     "#ffedea",
-     "#831c1e"
-    ],
-    "warning": [
-     "#fffbeb",
-     "#92400e"
-    ],
-    "neutral": [
-     "#f3f4f6",
-     "#374151"
-    ],
-    "accent": [
-     "#fdf2f7",
-     "#6b1d3e"
-    ]
-   },
-   "radius": {
-    "card": 8,
-    "control": 6
-   },
-   "font": {
-    "family": "DM Sans",
-    "second": null,
-    "fallback": "Inter, system-ui, sans-serif",
-    "sizes": {
-     "title": 32,
-     "section": 18,
-     "kpi": 24,
-     "body": 14,
-     "small": 12
-    },
-    "weights": [
-     400,
-     500,
-     600,
-     700
-    ],
-    "note": "700 for the page title only."
-   },
-   "density": "sparse",
-   "rowHeight": 45,
-   "sidebarWidth": 230,
-   "gap": 24,
-   "pad": 24,
-   "controlHeight": 32
-  },
-  "shell": "open-plane",
-  "shellAlternatives": [
-   "ruled-t-frame"
+  "tones": [
+   "bold",
+   "editorial"
   ],
-  "signature": "The full hue goes only on small marks: the one filled-button style, the data series and the active nav icon. Its 50-200 tints carry every area: the active nav row (tint fill with the dark ink of the hue), the plan or trial card, badges and progress tracks. The primary action may instead be near-black, as on the study's newsletter home.",
-  "identity": [
-   "The ladder built from the brand's own hue (its logo, the brief's object) in place of the dealt raspberry: the full hue on small marks, its pale tints on areas, never violet or indigo.",
-   "The product's objects in the lead block: the newsletter's latest issue as its cover, the shop's products as 40px thumbnails, the course's lessons with their own art.",
-   "A ground one level toward the hue's palest tint (#fbf7f8 for the raspberry) in place of #f9fafb, so the page and the tints read as one family."
+  "needs": [],
+  "idea": "One short sentence, set at poster scale, is the composition. The trick that makes it an idea rather than a big headline: something from the subject sits inside the sentence where a word would be. A strip of photograph fills the gap between two words; a small live fragment of the product replaces the noun; the object the sentence names is pictured at the size of a letter. Write the sentence first, find the word that can be shown instead of said, and put the showing in its place. The reader completes the sentence with their eyes.",
+  "composition": "The sentence is four to seven words and runs as one or two full-width lines at 9–13vw. Inline with the type, on the baseline, sits one media slot: a rounded-rectangle or square frame exactly one line-height tall and two to three ems wide, holding a photograph or a looping crop. Above and below the sentence the screen is empty except for a small navigation line and one supporting sentence set small, both on the same left margin. Later sections repeat the grammar at smaller scale: each is a short statement on the left six columns with its proof (image, figure, list) on the right, so the page reads as a series of sentences with evidence. Generous vertical space (160px or more) between sections.",
+  "typography": "Display weight with real presence (medium to bold), tracking -0.03 to -0.05em, leading 0.95–1.0 so two lines sit close. The inline frame aligns to cap height and baseline exactly; set it with em units so it scales with the type.",
+  "typeClasses": [
+   "grotesk-tight",
+   "serif-display",
+   "condensed-heavy",
+   "serif-light-large"
   ],
-  "avoid": [
-   "the full hue on large areas",
-   "a second accent family (four families on one screen was flagged in the study)",
-   "a gradient on the trial chip or upgrade button",
-   "a left accent bar on the active nav row on top of the tint (seen once in 23 screens)",
-   "violet or indigo"
+  "colour": "A calm ground with ink at full contrast. The only colour comes from the photograph inside the sentence; if the palette has an accent, use it once, on the action.",
+  "paletteTags": [
+   "two-tone",
+   "light-neutral",
+   "single-field",
+   "mono-accent"
   ],
-  "notes": "All three studied screens of this kind used violet, purple or pink as the one hue. The move does not depend on the hue, so the house's violet and indigo ban holds and the library deals a raspberry instead."
+  "imagery": "One strong, simple photograph that reads at small size (a face, an object, a texture, a horizon), cropped to a wide strip inside the sentence. The same image may open to full width in the next section, so the small slot feels like a window onto something larger.",
+  "sectionTags": [
+   "type-led",
+   "poster",
+   "quiet"
+  ],
+  "motion": "masked-headline",
+  "richness": "The collision of big type and one live image inside it. Because there is only one image on the first screen, choose it with care and give it perfect alignment to the letters.",
+  "pitfalls": "The sentence must be short enough for two lines on a phone, where the inline frame drops to its own line between the two halves. Do not style one word differently to fake the device. Do not use more than one slot per sentence.",
+  "seenIn": [
+   "aww-colonia-zacamil",
+   "aww-bleibtgleich26",
+   "opl-spatial",
+   "aww-coffeetech-r",
+   "opl-midnight-2"
+  ],
+  "allow": []
  },
- "shell": {
-  "id": "ruled-t-frame",
-  "name": "Ruled T-frame",
-  "basis": "4 of 23 screens (3 dark, 1 light)",
-  "suits": [
-   "community",
-   "creator",
-   "smb-admin"
+ "hero": {
+  "id": "sentence-with-photo-strip",
+  "name": "Sentence with a photo strip",
+  "archetype": "inline-media-sentence",
+  "directions": [
+   "sentence-as-layout",
+   "place-carries-it"
   ],
-  "numbers": {
-   "sidebarWidth": "210-240",
-   "topBar": "64px with a 1px bottom rule",
-   "rules": "1px; #1a1a1a on #000, #f2f2f2 on white",
-   "navPitch": "34 (dark) or 40 (light)",
-   "switcher": "at the top bar's right end, behind a full-height 1px divider",
-   "contentGutter": "29px from the sidebar rule and the window edge"
-  },
-  "blueprint": "A 210-240px sidebar and a 64px top bar share one ground, divided only by 1px rules. The workspace or community switcher sits at the right end of the top bar behind a full-height divider; the sidebar holds the wordmark and the nav on a 34px pitch with sentence-case group labels. On dark, the active item is its label going from #bbb to #fff. The top bar must carry something real (search, the back link and object name, the switcher): two studied screens left about 1070px of it blank and were flagged.",
-  "phone": "The top bar stays at 48-56px with the switcher reduced to its mark; the sidebar becomes a full-screen menu sheet or a bottom bar of four or five destinations."
+  "needs": [],
+  "blueprint": "A warm flat ground with no navigation bar. One sentence of four or five words runs as a single line of condensed capitals at clamp(120px, 13vw, 200px), sitting on the vertical centre and reaching edge to edge inside 28px margins. Where one word of the sentence would be, a strip of photograph takes its place: a frame exactly one cap-height tall (set in em) and 45–50% of the viewport wide, ratio near 5:1, corners radiused 14px, `object-fit: cover`. Build the line as a flex row with `align-items: baseline` and give the strip `flex: 1` so words and picture always fill the width. The photograph shows the thing the sentence names: a wide view of the place, taken from above or along a horizon, so it survives the letterbox crop. The top third of the screen is empty apart from a 15px wordmark top-left and two text links top-right. About 150px under the sentence the single action sits centred as a small solid button. One supporting sentence at 22px, max 44ch, is centred 48px above the bottom edge.",
+  "mobile": "The sentence breaks into two lines at 21vw with the strip between them: the first words, then the photograph as a 2:1 frame at full width minus 16px margins with the same 14px corners, then the remaining words. The block is centred vertically. The action button sits 32px under the last line and the supporting sentence under that at 16px. The top links collapse to one word.",
+  "headline": "A sentence of four or five short words, about 14 characters of type in total, whose missing word is the photograph.",
+  "motion": "shutter-image",
+  "seenIn": [
+   "aww-colonia-zacamil"
+  ]
  },
- "screens": [
-  {
-   "name": "overview",
-   "pattern": {
-    "id": "kpi-strip-chart-rail",
-    "name": "KPI strip, main chart and a side rail",
-    "screen": "overview",
-    "kinds": [
-     "creator",
-     "smb-admin",
-     "community",
-     "analytics"
+ "type": null,
+ "palette": null,
+ "photos": {
+  "set": "sky-and-space",
+  "title": "Sky and space",
+  "note": "skies, clouds, stars and night skies",
+  "treatment": null,
+  "others": [
+   "fog-and-quiet",
+   "architecture"
+  ],
+  "photos": [
+   {
+    "id": 505,
+    "alt": "Tiny silhouetted figure on a dark ridge under a blue and orange twilight sky",
+    "tone": "dark",
+    "colours": [
+     "deep blue",
+     "orange",
+     "black"
     ],
-    "basis": "a newsletter home; a community overview",
-    "blueprint": "Title row: a 24px noun or the product's name at 600-700, an optional 14-16px grey line under it, and the one primary action on the right, bottom-aligned with that line. 16-24px below, the scope row: section tabs and the date range in one row of 32-36px controls, or a 48px segmented track with the range select inside its right end. Then a grid of 1fr and a fixed 384px rail with a 24px gap. Main column: one KPI container split by 1px dividers into 3-5 equal cells (14px grey label, 24px value at 400-600, a 12px caption naming the baseline and window), then the main chart card, which is the largest thing on the screen, then the next card, all 16px apart. Rail: 16px headings outside their cards, 8px above each and 16px after the previous card; a recent-items list of 3-5 rows on a 45px pitch with 1px rules, closed by a 30px outlined 'View all' button instead of pagination. The rail starts level with the first card, not with the title.",
-    "phone": "The rail moves below the main column; the KPI container becomes a 2-column grid; tabs scroll inside their own row."
+    "mono": false,
+    "calm": "top",
+    "quality": 5,
+    "ratio": 1.5,
+    "by": "lee Scott",
+    "page": "https://unsplash.com/photos/_VTgctRg0tA"
+   },
+   {
+    "id": 901,
+    "alt": "Green aurora sweeping across the night sky above snowy ground",
+    "tone": "dark",
+    "colours": [
+     "emerald green",
+     "dark teal",
+     "slate"
+    ],
+    "mono": false,
+    "calm": "none",
+    "quality": 4,
+    "ratio": 1,
+    "by": "Marcelo Quinan",
+    "page": "https://unsplash.com/photos/R3pUGn5YiTg"
+   },
+   {
+    "id": 721,
+    "alt": "Clear twilight sky fading from deep blue to an orange horizon",
+    "tone": "dark",
+    "colours": [
+     "navy",
+     "orange",
+     "dusty pink"
+    ],
+    "mono": false,
+    "calm": "all",
+    "quality": 4,
+    "ratio": 1.5,
+    "by": "Jeremy Ricketts",
+    "page": "https://unsplash.com/photos/cGe1PV_yEso"
+   },
+   {
+    "id": 654,
+    "alt": "Starry dusk sky glowing orange above silhouetted trees",
+    "tone": "dark",
+    "colours": [
+     "deep purple",
+     "burnt orange",
+     "black"
+    ],
+    "mono": false,
+    "calm": "top",
+    "quality": 4,
+    "ratio": 1.5,
+    "by": "Josh Felise",
+    "page": "https://unsplash.com/photos/trvELSvNZoY"
    }
+  ]
+ },
+ "motion": {
+  "id": "shutter-image",
+  "name": "Shutter image",
+  "description": "The one hero or showcase image opens from an edge with a clip-path over about 1.1 seconds while the picture inside settles from 1.12 scale to rest. Use it once, on the image that matters most; later images simply are there. Recipe: 'Image shutter' in references/motion.md."
+ },
+ "sections": [
+  {
+   "id": "showcase-headline-you-can-type",
+   "role": "showcase",
+   "name": "Headline you can type",
+   "shape": "statement",
+   "tags": [
+    "ui-led",
+    "type-led",
+    "poster"
+   ],
+   "directions": [
+    "sentence-as-layout",
+    "type-only-statement",
+    "product-performs",
+    "loud-flat-poster",
+    "dark-room",
+    "colour-chapters"
+   ],
+   "needs": [],
+   "blueprint": "The section's headline is an input. One line at clamp(48px, 8vw, 132px), tight tracking, flush left across columns 1–12, is a real `<input>` (root marked data-ui) with no border and no fill, prefilled with a believable two-to-five-word example of what a user gives the product: a search, a question, a date in words, a colour name. A solid caret block 0.08em wide blinks after the last character. 48px beneath, on the same left edge, the product's answer appears at true interface size, at most 560px wide: three result rows, one parsed value, or a swatch, updating as the visitor types. Bottom-left, three more examples at 17px act as plain text buttons that refill the line. The rest of the 88svh field is empty. If the text outgrows the line it scrolls inside the input; it never wraps.",
+   "mobile": "The input is set at 11vw on one line and scrolls sideways inside itself when the text runs long. The answer follows 28px below at full width and true size. The three examples become a wrapping row of filled blocks 44px tall beneath the answer; tapping one refills the line.",
+   "seenIn": [
+    "opl-shelf",
+    "opl-tiny-computer-co"
+   ]
   },
   {
-   "name": "analytics",
-   "pattern": null
+   "id": "features-sentences-with-switches",
+   "role": "features",
+   "name": "Sentences with switches",
+   "shape": "band",
+   "tags": [
+    "ui-led",
+    "colour-field",
+    "type-led"
+   ],
+   "directions": [
+    "sentence-as-layout",
+    "colour-chapters",
+    "one-motif",
+    "loud-flat-poster",
+    "product-performs",
+    "type-only-statement"
+   ],
+   "needs": [],
+   "blueprint": "Four or five capabilities, each one plain sentence of five to eight words about what the product will do for you, each ending in a working switch. Every sentence is a full-bleed band 20vh tall, butted against the next with no gap. Inside, on the 12-column grid: the sentence at clamp(30px, 3.6vw, 60px) on one line in columns 1–10, vertically centred; in columns 11–12, right-aligned, the product's real toggle, built in em with its root marked data-ui, 1.1em tall so it matches the type. Off, a band is the page ground and its sentence is in the soft ink. On, the band fills with a palette colour, a different one per band, the sentence turns to full ink and a second line at 17px appears beneath stating the consequence in figures. Two bands are on at load. Toggles answer click, Space and Enter. There is no heading; the first sentence does that work.",
+   "mobile": "Bands are at least 132px tall. The sentence is set at 6.4vw on two lines in the left 76% of the width; the toggle sits at the right, vertically centred, with a 44px touch target. When a band is on, the consequence line opens under the sentence at 15px.",
+   "seenIn": []
   },
   {
-   "name": "list",
-   "pattern": null
+   "id": "how-it-works-lines-that-step-across",
+   "role": "how-it-works",
+   "name": "Lines that step across",
+   "shape": "statement",
+   "tags": [
+    "type-led",
+    "poster"
+   ],
+   "directions": [
+    "type-only-statement",
+    "sentence-as-layout",
+    "loud-flat-poster",
+    "editorial-report",
+    "borrowed-category"
+   ],
+   "needs": [],
+   "blueprint": "The sequence is written, not counted. Four lines of display type, one stage per line, each a complete short clause that begins with its order word: 'First you send it.' 'Then we take it apart.' 'You choose one.' 'It ships on Friday.' Set at clamp(36px, 4.6vw, 76px), leading 1.0, one line each. The first line starts on column 1 and each following line starts two columns further right (grid-column-start 1, 3, 5, 7), so the block descends as a staircase and the eye follows the diagonal. Under each line, on that line's own left edge and 12px below, a sentence of up to 34ch at 17px in the soft ink. 56px between stages. The last line may take the accent colour as the single emphasis. The first line serves as the heading; there is no title above. Leave the columns to the left of the final stage empty.",
+   "mobile": "Lines drop to 8.4vw and may wrap onto a second line. The staircase becomes a smaller indent of 6vw per stage, so the fourth line starts 18vw in. Each sentence sits under its line at 16px on the same indent. 40px between stages.",
+   "seenIn": [
+    "opl-rendez-vous-franceclat"
+   ]
+  },
+  {
+   "id": "proof-names-run-on-sentence",
+   "role": "proof",
+   "name": "Names as one sentence",
+   "shape": "statement",
+   "tags": [
+    "type-led",
+    "poster"
+   ],
+   "directions": [
+    "type-only-statement",
+    "sentence-as-layout",
+    "name-as-monument",
+    "dark-room",
+    "loud-flat-poster"
+   ],
+   "needs": [],
+   "blueprint": "Client, press or partner names are written out as one run-on sentence and set large: clamp(40px, 5vw, 76px), leading 1.0, flush left across all twelve columns, wrapping naturally over five to seven lines. Names are separated by commas and the list ends with a full stop. All names are set in a dimmed ink (still at least 3:1 against the ground), so the block reads as texture; one name at a time is lit in the full ink, and the lit name moves through the list every two seconds (a class toggled by a short script, with a 400ms colour transition). The sentence opens with two or three plain words in the full ink that act as the heading: the phrase that introduces the names. Nothing else is in the section: no logos, no columns, and 120px of space above and below.",
+   "mobile": "The same sentence at 9vw, wrapping over ten to fourteen lines; cut the list to the twelve strongest names so it stays within one and a half screens. The lit name still cycles. Margins are 20px and there are no other elements.",
+   "seenIn": [
+    "aww-revelatio-studio"
+   ]
+  },
+  {
+   "id": "cta-blank-in-the-sentence",
+   "role": "cta",
+   "name": "A sentence with a blank",
+   "shape": "statement",
+   "tags": [
+    "type-led",
+    "ui-led"
+   ],
+   "directions": [
+    "sentence-as-layout",
+    "product-performs",
+    "type-only-statement",
+    "one-motif",
+    "colour-chapters"
+   ],
+   "needs": [],
+   "blueprint": "The closing sentence has a gap in it, and the gap is the form. A sentence of five to eight words is set at about 6vw on two lines, flush left across columns 1–11; there is no separate heading. Where the reader's email (or name, or city) belongs, an `<input>` sits inline on the baseline: a filled block of the one-step tone, exactly one line-height tall and about 7em wide, with the placeholder in the same face and size in the softer ink, no border, and the page's radius or motif corner. The sentence's last word is the submit `<button>`, set in the same type on a block of the accent colour of the same height. Field and button use `em` units so they scale with the sentence. One line at 16px under the sentence, in the softer ink, says what happens after sending. Nothing else is in the section.",
+   "mobile": "The sentence is set at 10vw on two lines; the input drops to a line of its own between them at full width and one line-height tall, and the final word, as the button, ends the second line. The explaining line follows at 15px.",
+   "seenIn": [
+    "opl-shelf"
+   ]
   }
- ]
+ ],
+ "references": [
+  {
+   "id": "opl-spatial",
+   "name": "Spatial",
+   "url": "https://spatial-festival.com/",
+   "source": "One Page Love",
+   "kind": "event",
+   "score": 7.7,
+   "idea": "Typography behaves like sound in a room: plain black statements swell, stretch and bend through an empty white viewport as you scroll.",
+   "mood": [
+    "stark",
+    "experimental",
+    "precise",
+    "kinetic"
+   ],
+   "archetype": "type-poster",
+   "hero": "A white viewport holding only the festival dates: two centred lines in Neue Haas Grotesk Roman at roughly 6.7vw, black, tight leading, sitting at the exact vertical middle and spanning about half the width. Large empty fields above and below; no image, no button, no supporting copy. The header is the only other element: a light uppercase wordmark with tight tracking flush to the top-left corner at a 20px inset, and nine small bold uppercase links in a row across the top right. Mobile is the same poster at 40px with a two-line hamburger.",
+   "type": "One face, Neue Haas Grotesk Display 55 Roman, for everything: statements from 56px up to about 10vw, 13px body, bold 13px uppercase navigation, a timetable at about 16px with tight leading. Statement lines are distorted per glyph, each letter scaled to a different width and height.",
+   "colour": "#ffffff #000000 #e8a25c — Pure black on pure white; the programme section inverts to white on black. The only colour is the amber haze of a single photograph.",
+   "imagery": "Almost none. The images are canvas-rendered text statements warped and magnified until letter fragments become abstract black shapes cropped by the viewport. One warm, hazy venue photograph sits inset at half width beside body copy, square-cornered.",
+   "layout": "Full width with 10 to 20px margins. Opens with one centred statement per screen, then drops into left-aligned two-column copy and, further down, edge-to-edge four-column timetables. The swing between empty poster screens and tightly packed listings is the page's rhythm.",
+   "sections": [
+    {
+     "role": "intro",
+     "description": "A run of full-viewport white screens, each carrying one centred two-line sentence. The text is drawn on canvas and deformed: letters within a word have different widths and heights and baselines wobble. Between screens the type is magnified so far that only the strokes and counters of a few letters cross the frame, cropped on every side, while a small readable version of the next sentence appears inside the wreckage of the previous one."
+    },
+    {
+     "role": "other",
+     "description": "A calm reset: a three-line centred statement at about 5vw in undistorted type fills the top half. At the bottom, a column of 16px body copy about 650px wide sits flush to the left margin, and an amber-toned photograph starts at the horizontal centre and runs to the right margin with square corners, cropped by the fold."
+    },
+    {
+     "role": "list",
+     "description": "Black full-bleed section. Day headings are single small lines above a hairline; under each, a four-column table spans the full width: artist flush left, format at one third, room at two thirds, time range right-aligned at the far edge. Rows are about 35px high with a hairline between each, all in the same 30px grotesk with no bold; changeovers are marked by rows in capitals."
+    }
+   ],
+   "steal": [
+    "Open with a single factual line (the dates) centred on an otherwise empty white screen instead of a branded hero.",
+    "Scale each letter of a statement independently in width and height so plain grotesk type looks as if it is resonating.",
+    "Set a programme as a full-width four-column hairline table in one size and weight, times right-aligned, on an inverted background."
+   ]
+  },
+  {
+   "id": "opl-midnight-2",
+   "name": "Midnight",
+   "url": "https://www.askmidnight.com",
+   "source": "One Page Love",
+   "kind": "ai-product",
+   "score": 7.1,
+   "idea": "The headline's circles are literally pictured: one blurred dark ring, sliced into horizontal bands, becomes the hero, the demo panel, the session cards and the footer.",
+   "mood": [
+    "calm",
+    "nocturnal",
+    "soft",
+    "thoughtful",
+    "minimal"
+   ],
+   "archetype": "fullbleed-media-overlay",
+   "hero": "No navigation at all. A canvas fills the full width and the top 90% of the viewport: a huge out-of-focus dark navy ring on drifting taupe, sage and terracotta, cut into horizontal bands about 78px tall that are slightly offset like blinds. On the vertical centre line, starting 58px from the left, sit a small rounded-square line icon and a one-line headline at 48px in cream. On the same baseline, starting 59% across, a two-line 17px statement whose first sentence is white and bold while the rest drops to half opacity. The cream page background shows as a 90px strip at the bottom. No button.",
+   "type": "Public Sans only, weight 500, tracking −0.04em. Headline 48px, mid-page statement about 38px on five centred lines, body 13–17px. Signature device: within one paragraph the first sentence is full strength and the remainder faded, replacing the usual heading-plus-subhead pair.",
+   "colour": "#f4efe6 #07172a #867768 #687674 #a8735c #faf7f1 — Warm cream pages against midnight navy; the gradient mixes muted taupe, sage and terracotta around the dark ring. A peach-cream fills the small pill button. No bright accent anywhere.",
+   "imagery": "An animated blurred ring gradient with band displacement and fine grain, used full-bleed in hero and footer, inset with 8px corners as the demo panel, and miniaturised onto three portrait session cards. No photos or UI screenshots.",
+   "layout": "30px side margins. Sections alternate between full-bleed gradient and cream type-only screens. Section headers split into left title and right small paragraph. Text blocks are short and often occupy one half of the width, leaving the other empty (the FAQ sits entirely in the right half).",
+   "sections": [
+    {
+     "role": "intro",
+     "description": "A full cream viewport with one centred paragraph of five lines at roughly 38px, about 820px wide. Only the opening sentence is dark; the remaining words are pale and darken progressively with scroll. Later, three small portrait cards, each about 115×180px with a mini gradient, a date at the top and a two-line label bottom-left, fan across the right side of the text, overlapping it with a soft shadow."
+    },
+    {
+     "role": "showcase",
+     "description": "Header row: a two-line title at 34px on the left, a three-line 12px grey paragraph in the last fifth on the right. Below, a gradient panel spans the full content width, about 650px tall with 8px corners, holding a centred question at 34px in cream, a one-line caption, and an email capsule with an inline peach button; a small play capsule sits centred near its bottom edge."
+    },
+    {
+     "role": "features",
+     "description": "A left-aligned two-line lead uses the dark-then-faded sentence device. Under it a two-by-two arrangement with no cards or borders, columns starting at 0 and 50%: each item is a 24px pale rounded-square icon, a quoted question as a 13px semibold title, then three or four lines of grey 12px text about 300px wide. A waitlist capsule floats fixed at bottom centre."
+    },
+    {
+     "role": "footer",
+     "description": "FAQ rows with hairlines and chevrons occupy only the right half of the screen above. The footer is the gradient again, full-bleed and about 190px tall: a two-line cream statement at left, an email capsule with inline button at right on the same line, and a row of tiny grey legal links along the bottom."
+    }
+   ],
+   "steal": [
+    "Slice a soft blurred gradient into horizontal bands with small offsets so a familiar glow becomes a recognisable, ownable texture.",
+    "Replace heading-plus-subhead with one paragraph whose first sentence is full contrast and the rest half opacity.",
+    "Remove the nav from the hero entirely and put headline left and supporting line right on one shared baseline at mid-height."
+   ]
+  },
+  {
+   "id": "opl-juggle",
+   "name": "Juggle",
+   "url": "https://www.joinjuggle.com",
+   "source": "One Page Love",
+   "kind": "saas",
+   "score": 8,
+   "idea": "The headline literally drowns: a flat blue field rises to half height and the lines below the waterline turn from red to submerged navy.",
+   "mood": [
+    "bold",
+    "blunt",
+    "graphic",
+    "energetic"
+   ],
+   "archetype": "type-poster",
+   "hero": "Two flat fields: white above, saturated blue below, meeting at exactly half height. A three-line all-caps headline in a black-weight grotesque at 8.4vw is centred across the seam, about 65% of the width, lines nearly touching. The first line sits on white in red-orange; the second is cut by the seam, and its lower half plus the whole third line render dark navy as if under water. Small red logo top-left, a rectangular red button with tracked caps top-right. Near the bottom, one line of white condensed caps names the audience. No image, no sub-paragraph.",
+   "type": "Acme Gothic Black 900 caps at 122px, -0.03em, for the hero only. Section heads use Helvetica Now Display Condensed bold caps around 48 to 70px; body is Helvetica Now 17px; labels are small tracked caps. Roughly a 7:1 headline-to-body jump.",
+   "colour": "#2e2eff #ffffff #ff3b1f #0a0a0a #f5f3ef #020156 — Three flat poster colours each own whole sections: electric blue, red-orange and black, with white and warm off-white for product areas. No tints, no gradients.",
+   "imagery": "Simplified product UI on a cream rounded panel over black with a small video-call window; otherwise flat vector graphics: a pair of blinking eyes, a smiley cut into shuffled square tiles.",
+   "layout": "Full-bleed colour blocks with one message each, mostly centred. Product sections switch to a two-column split on off-white with about 90px margins. Marquee strips separate blocks and a slim sticky bar carrying the CTA rides the bottom edge.",
+   "sections": [
+    {
+     "role": "intro",
+     "description": "Full-screen electric blue. Centred stack: a tiny tracked caps label, three lines of white condensed bold caps at about 5vw, a gap, then a single heavier, wider word at a larger size as the punchline, a faint blurred line of text beneath it and an outlined rectangular button. Wide empty margins left and right."
+    },
+    {
+     "role": "other",
+     "description": "Problem check on full-screen red-orange, under a white marquee strip of condensed caps with small red buttons repeating inside it. Centre: a two-line white condensed caps heading at about 5vw; below, a flat illustration of two white almond eyes with black pupils; a tracked caps instruction line; then three evenly spaced white outlined checkboxes, each with a two-line caption, one already ticked."
+    },
+    {
+     "role": "how-it-works",
+     "description": "Black section. A small tracked caps title centred, under it three numbered text tabs in a row with the active one underlined. Below, a cream rounded app window about 55% wide fills the rest of the viewport: mostly blank note area, a floating status chip, and a small dark video-call window with three faces overlapping its lower edge."
+    },
+    {
+     "role": "footer",
+     "description": "White. Left: a narrow column of small body text, two founder names with roles, then three link columns under tracked caps labels. Right: a blue square about 280px holding a white smiley face sliced into a three-by-three grid of tiles that are rotated and shuffled like a sliding puzzle. Tiny logo and copyright bottom-left."
+    }
+   ],
+   "steal": [
+    "Split the hero into two flat colour fields and recolour the headline where it crosses the seam, so the layout acts out the copy.",
+    "Give each section one saturated flat colour and one sentence, and separate them with a thin marquee strip.",
+    "Turn a pain-point list into a mock checklist with real checkboxes under a blunt question heading."
+   ]
+  }
+ ],
+ "scenes": []
 }
