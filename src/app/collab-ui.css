@@ -2917,8 +2917,11 @@
 .workspace-metric strong,
 .workspace-row-copy strong,
 .workspace-activity-row strong,
+.deal-focus-status strong,
+.deal-focus-step strong,
 .workspace-rail-panel > strong,
-.workspace-recent-row strong {
+.workspace-recent-row strong,
+.workspace-security-note strong {
   color: var(--ws-ink);
 }
 
@@ -2936,6 +2939,7 @@
 }
 
 .workspace-nav-link,
+.workspace-nav-label,
 .workspace-sidebar-bottom > a,
 .workspace-user small,
 .workspace-scope small,
@@ -2963,6 +2967,25 @@
 .workspace-nav-link:hover svg,
 .workspace-topbar-action:hover {
   color: var(--ws-accent);
+}
+
+.workspace-panel-heading > a,
+.deal-focus-footer > a,
+.workspace-rail-panel > a {
+  color: var(--ws-accent);
+}
+
+.deal-focus-status small,
+.deal-focus-step small,
+.workspace-security-note small {
+  color: var(--ws-secondary);
+}
+
+.workspace-panel-heading > a:hover,
+.deal-focus-footer > a:hover,
+.workspace-rail-panel > a:hover {
+  background: #eaf2ff;
+  color: #0047d6;
 }
 
 .workspace-user {
@@ -3026,15 +3049,25 @@
 }
 
 .workspace-metric small,
+.workspace-demo-note,
+.workspace-nav-label {
+  color: var(--ws-secondary);
+}
+
 .workspace-row-status,
 .deal-focus-state,
 .deal-focus-footer,
 .deal-step-amount,
 .branch-budget-value,
 .branch-ratio,
-.workspace-security-note,
-.workspace-demo-note {
+.workspace-security-note {
   color: var(--ws-meta);
+}
+
+.deal-focus-state,
+.deal-focus-footer,
+.deal-step-amount {
+  color: var(--ws-secondary);
 }
 
 .workspace-row:hover,
