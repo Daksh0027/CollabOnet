@@ -1346,12 +1346,17 @@
 
 .workspace-nav-link {
   display: flex;
+  width: 100%;
   min-height: 34px;
   align-items: center;
   gap: 10px;
   padding: 0 9px;
+  border: 0;
+  background: transparent;
   color: #b4b4b4;
+  cursor: pointer;
   font-size: 12px;
+  text-align: left;
   transition: color 130ms ease, background-color 130ms ease;
 }
 
@@ -2882,4 +2887,168 @@
   .workspace-security-note strong
 ) {
   font-size: 13px;
+}
+
+/* Workspace uses the same light blue system as the public product. */
+.workspace-app {
+  --ws-ground: #f7faff;
+  --ws-panel: #ffffff;
+  --ws-raised: #eef5ff;
+  --ws-rule: #dce8f8;
+  --ws-ink: #10233f;
+  --ws-secondary: #526985;
+  --ws-meta: #6d819d;
+  --ws-accent: #0057ff;
+  background: var(--ws-ground);
+  color: var(--ws-ink);
+}
+
+.workspace-sidebar,
+.workspace-topbar {
+  border-color: var(--ws-rule);
+  background: #ffffff;
+}
+
+.workspace-brand,
+.workspace-scope strong,
+.workspace-user strong,
+.workspace-heading h1,
+.workspace-panel-heading h2,
+.workspace-metric strong,
+.workspace-row-copy strong,
+.workspace-activity-row strong,
+.workspace-rail-panel > strong,
+.workspace-recent-row strong {
+  color: var(--ws-ink);
+}
+
+.workspace-scope {
+  border-color: var(--ws-rule);
+  background: #f7faff;
+  color: var(--ws-ink);
+}
+
+.scope-mark,
+.workspace-user-avatar,
+.deal-focus-logo {
+  background: #e8f1ff;
+  color: var(--ws-accent);
+}
+
+.workspace-nav-link,
+.workspace-sidebar-bottom > a,
+.workspace-user small,
+.workspace-scope small,
+.workspace-breadcrumb,
+.workspace-topbar-action,
+.workspace-tab,
+.workspace-panel-heading p,
+.workspace-heading p,
+.workspace-metric > span,
+.workspace-activity-row p,
+.workspace-activity-row time,
+.workspace-rail-section h2,
+.workspace-rail-panel > p,
+.workspace-recent-row small {
+  color: var(--ws-secondary);
+}
+
+.workspace-nav-link:hover,
+.workspace-nav-link.is-selected {
+  background: #eaf2ff;
+  color: var(--ws-accent);
+}
+
+.workspace-nav-link.is-selected svg,
+.workspace-nav-link:hover svg,
+.workspace-topbar-action:hover {
+  color: var(--ws-accent);
+}
+
+.workspace-user {
+  border-color: var(--ws-rule);
+}
+
+.workspace-breadcrumb strong,
+.workspace-persona-select select {
+  color: var(--ws-ink);
+}
+
+.workspace-persona-select {
+  border-color: var(--ws-rule);
+  color: var(--ws-secondary);
+}
+
+.workspace-persona-select option {
+  background: #ffffff;
+  color: var(--ws-ink);
+}
+
+.workspace-primary-action {
+  background: var(--ws-accent);
+  color: #ffffff;
+}
+
+.workspace-primary-action:hover {
+  background: #0047d6;
+}
+
+.workspace-tabs,
+.workspace-metrics,
+.workspace-focus,
+.workspace-rail-panel,
+.workspace-recent {
+  border-color: var(--ws-rule);
+}
+
+.workspace-tab.is-active {
+  border-color: var(--ws-accent);
+  color: var(--ws-accent);
+}
+
+.workspace-tab:hover {
+  color: var(--ws-accent);
+}
+
+.workspace-metrics,
+.workspace-focus,
+.workspace-rail-panel,
+.workspace-recent {
+  background: #ffffff;
+}
+
+.workspace-metric + .workspace-metric,
+.deal-focus-status,
+.deal-focus-step,
+.workspace-activity-row,
+.branch-row {
+  border-color: var(--ws-rule);
+}
+
+.workspace-metric small,
+.workspace-row-status,
+.deal-focus-state,
+.deal-focus-footer,
+.deal-step-amount,
+.branch-budget-value,
+.branch-ratio,
+.workspace-security-note,
+.workspace-demo-note {
+  color: var(--ws-meta);
+}
+
+.workspace-row:hover,
+.workspace-recent-row:hover {
+  background: #f7faff;
+}
+
+.workspace-row-mark,
+.deal-step-mark,
+.recent-mark {
+  color: var(--ws-accent);
+}
+
+.workspace-security-note {
+  border-color: #b8d3ff;
+  background: #eaf2ff;
 }

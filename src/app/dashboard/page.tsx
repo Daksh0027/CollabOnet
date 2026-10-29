@@ -33,6 +33,7 @@ import { formatCurrency } from '@/lib/utils';
 
 type PersonaKey = keyof typeof PRESET_PERSONAS;
 type DashboardTab = 'overview' | 'work' | 'activity';
+type DashboardSection = 'overview' | 'creators' | 'messages' | 'contracts' | 'calendar' | 'collabs' | 'branches' | 'trust' | 'cases';
 
 interface Metric {
   label: string;
@@ -54,7 +55,7 @@ interface WorkspaceConfig {
   action: string;
   actionHref: string;
   tabs: Record<DashboardTab, string>;
-  navigation: Array<{ label: string; href: string; icon: typeof LayoutDashboard }>;
+  navigation: Array<{ label: string; href: string; icon: typeof LayoutDashboard; section: DashboardSection }>;
   metrics: Metric[];
   workItems: WorkItem[];
   activity: Array<{ title: string; detail: string; time: string }>;
@@ -67,15 +68,15 @@ const branchSpend = SEED_BRANCHES.reduce((sum, branch) => sum + branch.spentThis
 
 function getWorkspaceConfig(persona: UserPersona): WorkspaceConfig {
   const sharedNavigation = {
-    overview: { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-    creators: { label: 'Creator index', href: '/feed', icon: Search },
-    messages: { label: 'Deal rooms', href: '/messages', icon: MessageSquareText },
-    contracts: { label: 'Contracts', href: '/deals', icon: FileCheck2 },
-    calendar: { label: 'Calendar', href: '/calendar', icon: CalendarDays },
-    collabs: { label: 'Collabs', href: '/collab', icon: UsersRound },
-    branches: { label: 'Branch portfolio', href: '/enterprise/dashboard', icon: Building2 },
-    trust: { label: 'Trust & verification', href: '/onboarding/verify', icon: ShieldCheck },
-    cases: { label: 'Public case ledger', href: '/hall-of-shame', icon: ShieldCheck },
+    overview: { label: 'Overview', href: '/dashboard', icon: LayoutDashboard, section: 'overview' as const },
+    creators: { label: 'Creator index', href: '/feed', icon: Search, section: 'creators' as const },
+    messages: { label: 'Deal rooms', href: '/messages', icon: MessageSquareText, section: 'messages' as const },
+    contracts: { label: 'Contracts', href: '/deals', icon: FileCheck2, section: 'contracts' as const },
+    calendar: { label: 'Calendar', href: '/calendar', icon: CalendarDays, section: 'calendar' as const },
+    collabs: { label: 'Collabs', href: '/collab', icon: UsersRound, section: 'collabs' as const },
+    branches: { label: 'Branch portfolio', href: '/enterprise/dashboard', icon: Building2, section: 'branches' as const },
+    trust: { label: 'Trust & verification', href: '/onboarding/verify', icon: ShieldCheck, section: 'trust' as const },
+    cases: { label: 'Public case ledger', href: '/hall-of-shame', icon: ShieldCheck, section: 'cases' as const },
   };
 
   if (persona.personaKey === 'CREATOR') {
@@ -360,6 +361,7 @@ function BranchPortfolio() {
 export default function DashboardPage() {
   const { currentUser, setCurrentPersona } = useAuth();
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
+  const [activeSection, setActiveSection] = useState<DashboardSection>('overview');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [workspaceReady, setWorkspaceReady] = useState(false);
   const queryPersonaApplied = useRef(false);
@@ -378,6 +380,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     setActiveTab('overview');
+    setActiveSection('overview');
   }, [currentUser.personaKey]);
 
   if (!workspaceReady) {
@@ -403,23 +406,30 @@ export default function DashboardPage() {
     ? 'Brand representative details are masked in this workspace.'
     : `${contract.creatorDisplayName} · ${contract.milestones.length} milestones · ${formatCurrency(contract.totalAmount, contract.currency)}`;
 
-  const selectedTabTitle = config.tabs[activeTab];
+  const selectedNavigation = config.navigation.find((item) => item.section === activeSection);
+  const selectedTabTitle = activeSection === 'overview'
+    ? config.tabs[activeTab]
+    : selectedNavigation?.label ?? config.tabs[activeTab];
   const visibleNavigation = (
     <nav className="workspace-nav" aria-label="Workspace navigation">
       <span className="workspace-nav-label">Workspace</span>
       {config.navigation.map((item) => {
         const Icon = item.icon;
-        const selected = item.href === '/dashboard';
+        const selected = item.section === activeSection;
         return (
-          <Link
-            href={item.href}
+          <button
+            type="button"
             className={`workspace-nav-link${selected ? ' is-selected' : ''}`}
             key={item.href}
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={() => {
+              setActiveSection(item.section);
+              setActiveTab('overview');
+              setMobileMenuOpen(false);
+            }}
           >
             <Icon size={16} strokeWidth={1.7} />
             <span>{item.label}</span>
-          </Link>
+          </button>
         );
       })}
     </nav>
@@ -479,13 +489,13 @@ export default function DashboardPage() {
         <main className="workspace-canvas">
           <div className="workspace-heading">
             <div>
-              <h1>{activeTab === 'overview' ? config.title : selectedTabTitle}</h1>
+              <h1>{activeSection === 'overview' ? config.title : selectedTabTitle}</h1>
               <p>{config.description}</p>
             </div>
-            <Link className="workspace-primary-action" href={config.actionHref}>{config.action}<ArrowRight size={15} /></Link>
+            <Link className="workspace-primary-action" href={activeSection === 'overview' ? config.actionHref : selectedNavigation?.href ?? config.actionHref}>{activeSection === 'overview' ? config.action : `Open ${selectedNavigation?.label.toLowerCase() ?? 'workspace'}`}<ArrowRight size={15} /></Link>
           </div>
 
-          <div className="workspace-tabs" role="tablist" aria-label={`${config.label} dashboard views`}>
+          {activeSection === 'overview' && <div className="workspace-tabs" role="tablist" aria-label={`${config.label} dashboard views`}>
             {(Object.keys(config.tabs) as DashboardTab[]).map((tab) => (
               <button
                 key={tab}
@@ -500,7 +510,7 @@ export default function DashboardPage() {
                 {config.tabs[tab]}
               </button>
             ))}
-          </div>
+          </div>}
 
           <MetricStrip metrics={config.metrics} />
 
@@ -513,13 +523,15 @@ export default function DashboardPage() {
             >
               <div className="workspace-panel-heading">
                 <div>
-                  <h2>{activeTab === 'overview' ? focusTitle : selectedTabTitle}</h2>
-                  <p>{activeTab === 'overview' ? focusSubtitle : config.description}</p>
+                  <h2>{activeSection === 'overview' ? (activeTab === 'overview' ? focusTitle : selectedTabTitle) : selectedTabTitle}</h2>
+                  <p>{activeSection === 'overview' && activeTab === 'overview' ? focusSubtitle : config.description}</p>
                 </div>
                 <Link href={activeTab === 'activity' ? '/messages' : '/deals'} aria-label="Open full details"><ArrowRight size={16} /></Link>
               </div>
 
-              {activeTab === 'activity' ? (
+              {activeSection !== 'overview' ? (
+                <TaskList items={config.workItems} />
+              ) : activeTab === 'activity' ? (
                 <ActivityList items={config.activity} />
               ) : activeTab === 'work' ? (
                 <TaskList items={config.workItems} />
